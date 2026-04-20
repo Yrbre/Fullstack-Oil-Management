@@ -20,6 +20,7 @@ class IcTrnasInv extends Model
         'whse_code',
         'whse_loc',
         'doc_type',
+        'adj_type',
         'reason_code',
         'creation_date',
         'trans_date',
