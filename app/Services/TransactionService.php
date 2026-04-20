@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TransactionService implements TransactionServiceInterface
@@ -35,12 +36,32 @@ class TransactionService implements TransactionServiceInterface
         return $this->transactionRepository->getByItemId($itemId);
     }
 
-    public function create(array $data)
+    public function create(array $data, string $createdBy)
     {
         try {
-            return DB::transaction(function ($data) {
+            return DB::transaction(function ($data, $createdBy) {
+
+
                 // Ambil Before Balance (BB) dari Item Master
                 $item   = $this->itemMasterRepository->getById($data['item_id']);
+
+                $data['creation_date'] = now();
+                $data['created_by']    = $createdBy;
+                $data['status']        = 'NEW';
+
+                // Pecah trans_date
+                $transDate         = Carbon::parse($data['trans_date']);
+                $data['tgl']       = $transDate->format('d');
+                $data['bln']       = $transDate->format('m');
+                $data['thn']       = $transDate->format('Y');
+                $data['periode']   = $transDate->format('M Y');
+
+                // Ambil data item otomatis
+                $data['item_no']   = $item->item_no;
+                $data['item_desc'] = $item->item_desc;
+                $data['item_uom']  = $item->item_uom;
+
+
                 $bbQty = $item->current_stock;
 
                 //Switch Logic Doc_type
@@ -91,10 +112,29 @@ class TransactionService implements TransactionServiceInterface
         }
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data, string $updatedBy)
     {
-        $data['status'] = 'UPDATED';
-        return $this->transactionRepository->update($id, $data);
+        try {
+            return DB::transaction(function () use ($id, $data, $updatedBy) {
+                // Data otomatis saat update
+                $data['update_date'] = now();
+                $data['update_by']   = $updatedBy;
+                $data['status']      = 'UPDATED';
+
+                // Jika trans_date diubah, pecah ulang
+                if (isset($data['trans_date'])) {
+                    $transDate         = Carbon::parse($data['trans_date']);
+                    $data['tgl']       = $transDate->format('d');
+                    $data['bln']       = $transDate->format('m');
+                    $data['thn']       = $transDate->format('Y');
+                    $data['periode']   = $transDate->format('M Y');
+                }
+
+                return $this->transactionRepository->update($id, $data);
+            });
+        } catch (\Exception $e) {
+            throw new \Exception("Gagal mengupdate transaksi: " . $e->getMessage());
+        }
     }
 
     public function delete($id)

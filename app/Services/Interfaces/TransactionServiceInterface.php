@@ -10,9 +10,9 @@ interface TransactionServiceInterface
 
     public function getByItemId($itemId);
 
-    public function create(array $data);
+    public function create(array $data, string $createdBy);
 
-    public function update($id, array $data);
+    public function update($id, array $data, string $updatedBy);
 
     public function delete($id);
 }
