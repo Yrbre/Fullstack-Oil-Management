@@ -2,14 +2,16 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Models\IcTrnasInv;
+
+
+use App\Models\IcTransInv;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
     protected $model;
 
-    public function __construct(IcTrnasInv $model)
+    public function __construct(IcTransInv $model)
     {
         $this->model = $model;
     }

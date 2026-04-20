@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\IcTransInv;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,8 @@ class IcItemMst extends Model
     public $timestamps = false;
     protected $table = 'ic_item_mst';
 
+    const UPDATED_AT = null; // ← tidak ada updated_at
+    const CREATED_AT = null; // ← tidak ada created_at
     protected $fillable = [
         'item_id',
         'item_no',
@@ -26,10 +29,11 @@ class IcItemMst extends Model
     protected $casts = [
         'item_id' => 'integer',
         'inactive_ind'  => 'integer',
+        'current_stock' => 'double',
     ];
 
     public function transaction()
     {
-        return $this->hasMany(IcTrnasInv::class, 'item_id', 'item_id');
+        return $this->hasMany(IcTransInv::class, 'item_id', 'item_id');
     }
 }

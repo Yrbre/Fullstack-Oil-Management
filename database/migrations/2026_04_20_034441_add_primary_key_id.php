@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('ic_item_mst', function (Blueprint $table) {
             $table->id()->first();
-            $table->string('current_stock')->nullable()->after('item_usedby');
+            $table->double('current_stock')->nullable()->after('item_usedby');
         });
     }
 
@@ -24,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('ic_item_mst', function (Blueprint $table) {
             $table->dropColumn('id');
+            $table->dropColumn('current_stock');
         });
     }
 };
