@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Item\StoreItemRequest;
+use App\Http\Requests\Item\UpdateItemRequest;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use Illuminate\Http\Request;
 
@@ -86,7 +87,7 @@ class ItemMasterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateItemRequest $request, string $id)
     {
         try {
             $this->itemMasterService->update($id, $request->validated());

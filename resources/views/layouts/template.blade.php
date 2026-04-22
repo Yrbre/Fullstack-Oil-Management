@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="{{ asset('design/dark/assets/images/LogoTifico.png') }}">
     <title>SF Oil Management</title>
     <!--CSS -->
     @include('layouts.style')
@@ -22,6 +22,7 @@
         </main> <!-- main -->
     </div> <!-- .wrapper -->
     @include('layouts.script')
+    @stack('scripts')
 </body>
 
 </html>

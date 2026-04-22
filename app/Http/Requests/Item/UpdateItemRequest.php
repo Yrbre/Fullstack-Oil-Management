@@ -21,14 +21,15 @@ class UpdateItemRequest extends FormRequest
      */
     public function rules(): array
     {
+
+
         return [
-            'item_id'       => 'required|integer|unique:ic_item_mst,item_id',
-            'item_no'       => 'required|string|unique:ic_item_mst,item_no',
-            'item_desc'     => 'required|string',
-            'item_uom'      => 'required|string',
-            'item_glclass'  => 'required|string',
-            'item_usedby'   => 'required|exists:users,id',
-            'current_stock' => 'required|string',
+            'item_id'       => 'sometimes|integer|unique:ic_item_mst,item_id,' . $this->route('item_master'),
+            'item_no'       => 'sometimes|string|unique:ic_item_mst,item_no,' . $this->route('item_master'),
+            'item_desc'     => 'sometimes|string',
+            'item_uom'      => 'sometimes|string',
+            'item_glclass'  => 'sometimes|string',
+            'current_stock' => 'sometimes|string',
         ];
     }
 }

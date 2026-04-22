@@ -27,6 +27,7 @@ class ItemMasterService implements ItemMasterServiceInterface
 
     public function create(array $data)
     {
+        $data['inactive_ind'] = 0;
         return $this->itemMasterRepository->create($data);
     }
 

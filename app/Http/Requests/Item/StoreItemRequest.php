@@ -27,7 +27,6 @@ class StoreItemRequest extends FormRequest
             'item_desc'     => 'required|string',
             'item_uom'      => 'required|string',
             'item_glclass'  => 'required|string',
-            'item_usedby'   => 'required|exists:users,id',
             'current_stock' => 'required|string',
         ];
     }

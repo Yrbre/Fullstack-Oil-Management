@@ -46,6 +46,16 @@
                                 Oil</span></a>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a href="#" id="formsDropdown" class="dropdown-toggle nav-link" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="ml-lg-2">Monitoring</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="formsDropdown">
+                        <a class="nav-link pl-lg-2" href="{{ route('transactions.index') }}"><span
+                                class="ml-1">Transaksi Oil</span></a>
+                    </div>
+                </li>
                 {{-- <li class="nav-item dropdown">
                     <a href="#" id="tablesDropdown" class="dropdown-toggle nav-link" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -216,11 +226,11 @@
                 placeholder="Type something..." aria-label="Search"> --}}
         </form>
         <ul class="navbar-nav d-flex flex-row">
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link text-muted my-2" href="./#" id="modeSwitcher" data-mode="dark">
                     <i class="fe fe-sun fe-16"></i>
                 </a>
-            </li>
+            </li> --}}
             {{-- <li class="nav-item">
                 <a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-shortcut">
                     <i class="fe fe-grid fe-16"></i>
