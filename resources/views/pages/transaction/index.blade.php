@@ -46,15 +46,14 @@
                                             <td>{{ $item->status }}</td>
                                             <td>{{ $item->catatan }}</td>
                                             <td>
-                                                <a href="{{ route('item-master.edit', $item->id) }}"
-                                                    class="btn btn-sm btn-primary">Edit</a>
-                                                {{-- <form action="{{ route('item-master.destroy', $item->id) }}" method="POST"
-                                                    style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                                </form> --}}
+                                                <button class="btn btn-sm dropdown-toggle" type="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="text-muted sr-only">Action</span>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('transactions.edit', $item->id) }}">Edit</a>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

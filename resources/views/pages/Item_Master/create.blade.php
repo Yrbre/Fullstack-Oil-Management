@@ -7,7 +7,7 @@
                     <strong class="card-title">Form Create Item Oil</strong>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('item-master.store') }}">
+                    <form method="POST" id="myForm" action="{{ route('item-master.store') }}">
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -64,10 +64,23 @@
                                 @enderror
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
                     </form>
                 </div> <!-- /. card-body -->
             </div> <!-- /. card -->
         </div> <!-- /. col -->
     </div> <!-- /. end-section -->
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function(e) {
+            const btn = document.getElementById('submitBtn');
+
+            if (btn.disabled) {
+                e.preventDefault(); // cegah submit kedua
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+        });
+    </script>
 @endsection
