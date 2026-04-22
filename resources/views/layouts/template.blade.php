@@ -10,6 +10,7 @@
     <title>SF Oil Management</title>
     <!--CSS -->
     @include('layouts.style')
+    @stack('style')
 </head>
 
 <body class="horizontal dark  ">

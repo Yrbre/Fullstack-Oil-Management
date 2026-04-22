@@ -39,67 +39,62 @@ class TransactionService implements TransactionServiceInterface
     public function create(array $data, string $createdBy)
     {
         try {
-            return DB::transaction(function ($data, $createdBy) {
+            return DB::transaction(function () use ($data, $createdBy) {
+                $item = $this->itemMasterRepository->getById($data['item_id']);
 
-
-                // Ambil Before Balance (BB) dari Item Master
-                $item   = $this->itemMasterRepository->getById($data['item_id']);
 
                 $data['creation_date'] = now();
                 $data['created_by']    = $createdBy;
                 $data['status']        = 'NEW';
 
-                // Pecah trans_date
-                $transDate         = Carbon::parse($data['trans_date']);
-                $data['tgl']       = $transDate->format('d');
-                $data['bln']       = $transDate->format('m');
-                $data['thn']       = $transDate->format('Y');
-                $data['periode']   = $transDate->format('M Y');
+                $transDate       = Carbon::parse($data['trans_date']);
+                $data['tgl']     = $transDate->format('d');
+                $data['bln']     = $transDate->format('m');
+                $data['thn']     = $transDate->format('Y');
+                $data['periode'] = $transDate->format('M Y');
 
-                // Ambil data item otomatis
                 $data['item_no']   = $item->item_no;
                 $data['item_desc'] = $item->item_desc;
                 $data['item_uom']  = $item->item_uom;
 
+                $bbQty    = $item->current_stock;
+                $newStock = $bbQty; // ✅ fix bug 2 - inisialisasi default
 
-                $bbQty = $item->current_stock;
-
-                //Switch Logic Doc_type
                 switch ($data['doc_type']) {
                     case 'PORC':
-                        $data['bb_qty']         = $bbQty;
-                        $data['in_qty']         = $data['in_qty'];
-                        $data['out_qty']        = 0;
-                        $data['eb_qty']         = $bbQty + $data['in_qty'];
+                        $data['bb_qty']  = $bbQty;
+                        $data['in_qty']  = $data['trans_qty']; // ✅ pakai trans_qty dari form
+                        $data['out_qty'] = 0;
+                        $data['eb_qty']  = $bbQty + $data['in_qty'];
+                        $newStock        = $bbQty + $data['in_qty']; // ✅ fix bug 2
                         break;
 
                     case 'CONS':
-                        $data['bb_qty']         = $bbQty;
-                        $data['in_qty']         = 0;
-                        $data['out_qty']        = $data['out_qty'];
-                        $data['eb_qty']         = $bbQty - $data['out_qty'];
+                        $data['bb_qty']  = $bbQty;
+                        $data['in_qty']  = 0;
+                        $data['out_qty'] = $data['trans_qty']; // ✅ pakai trans_qty dari form
+                        $data['eb_qty']  = $bbQty - $data['out_qty'];
+                        $newStock        = $bbQty - $data['out_qty']; // ✅ fix bug 2
                         break;
 
                     case 'ADJI':
-                        $data['bb_qty']         = $bbQty;
-                        if ($data['adj_type']       === 'in') {
-                            $data['in_qty']         = $data['in_qty'];
-                            $data['out_qty']        = 0;
-                            $data['eb_qty']         = $bbQty + $data['in_qty'];
-                            $newStock               = $item->current_stock + $data['in_qty'];
+                        $data['bb_qty'] = $bbQty;
+                        if ($data['adj_type'] === 'IN') { // ✅ konsisten uppercase
+                            $data['in_qty']  = $data['trans_qty'];
+                            $data['out_qty'] = 0;
+                            $data['eb_qty']  = $bbQty + $data['in_qty'];
+                            $newStock        = $bbQty + $data['in_qty'];
                         } else {
-                            $data['in_qty']         = 0;
-                            $data['out_qty']        = $data['out_qty'];
-                            $data['eb_qty']         = $bbQty - $data['out_qty'];
-                            $newStock               = $item->current_stock - $data['out_qty'];
+                            $data['in_qty']  = 0;
+                            $data['out_qty'] = $data['trans_qty'];
+                            $data['eb_qty']  = $bbQty - $data['out_qty'];
+                            $newStock        = $bbQty - $data['out_qty'];
                         }
                         break;
                 }
 
-                // Simpan Data Transaksi
                 $transaction = $this->transactionRepository->create($data);
 
-                // Update Stock di Item Master
                 $this->itemMasterRepository->update($data['item_id'], [
                     'current_stock' => $newStock
                 ]);
@@ -107,7 +102,6 @@ class TransactionService implements TransactionServiceInterface
                 return $transaction;
             });
         } catch (\Exception $e) {
-            // Log error atau lakukan penanganan kesalahan lainnya
             throw new \Exception("Gagal membuat transaksi: " . $e->getMessage());
         }
     }

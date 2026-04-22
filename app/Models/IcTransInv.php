@@ -11,7 +11,6 @@ class IcTransInv extends Model
     public $timestamps = false;
     protected $table = 'ic_trans_inv';
     protected $fillable = [
-        'trans_id',
         'item_id',
         'item_no',
         'item_desc',
@@ -41,7 +40,6 @@ class IcTransInv extends Model
     ];
 
     protected $casts = [
-        'trans_id' => 'integer',
         'item_id' => 'integer',
         'creation_date' => 'datetime',
         'trans_date' => 'date',

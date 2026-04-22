@@ -30,8 +30,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['role:admin,manager,staff'])->group(function () {
-    Route::resource('item-master', ItemMasterController::class);
     Route::resource('transactions', TransactionController::class);
+});
+
+Route::middleware('role:admin')->group(function () {
+    Route::resource('item-master', ItemMasterController::class);
 });
 
 require __DIR__ . '/auth.php';

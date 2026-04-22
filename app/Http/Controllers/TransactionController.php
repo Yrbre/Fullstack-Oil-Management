@@ -23,7 +23,7 @@ class TransactionController extends Controller
     {
         try {
             $transactions = $this->transactionService->getall();
-            return view('pages.transaction.index', compact('transactions'));
+            return view('pages.Transaction.index', compact('transactions'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }
@@ -36,7 +36,7 @@ class TransactionController extends Controller
     {
         try {
             $items = $this->itemMasterService->getAll();
-            return view('pages.transaction.create', compact('items'));
+            return view('pages.Transaction.create', compact('items'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data.');
         }
@@ -68,7 +68,7 @@ class TransactionController extends Controller
     {
         try {
             $transaction = $this->transactionService->getById($id);
-            return view('pages.transaction.show', compact('transaction'));
+            return view('pages.Transaction.show', compact('transaction'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }
@@ -82,7 +82,7 @@ class TransactionController extends Controller
         try {
             $transaction = $this->transactionService->getById($id);
             $items = $this->itemMasterService->getAll();
-            return view('pages.transaction.edit', compact('transaction', 'items'));
+            return view('pages.Transaction.edit', compact('transaction', 'items'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }
