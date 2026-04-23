@@ -18,7 +18,7 @@ class TransactionRepository implements TransactionRepositoryInterface
 
     public function getAll()
     {
-        return $this->model->all();
+        return $this->model->orderBy('creation_date', 'desc')->get();
     }
 
     public function getById($id)

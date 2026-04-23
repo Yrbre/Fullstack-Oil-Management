@@ -20,6 +20,7 @@
                                         <th>Item Name</th>
                                         <th>Doc</th>
                                         <th>Quantity Transaksi</th>
+                                        <th>Ending Stock</th>
                                         <th>Status</th>
                                         <th>Remark</th>
                                         <th>Action</th>
@@ -43,6 +44,7 @@
                                             @else
                                                 <td>N/a</td>
                                             @endif
+                                            <td>{{ number_format($item->eb_qty, 0, ',', '.') }}</td>
                                             <td>{{ $item->status }}</td>
                                             <td>{{ $item->catatan }}</td>
                                             <td>
@@ -75,6 +77,30 @@
                     [16, 32, 64, 'All']
                 ]
             });
+        </script>
+        <script>
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    theme: 'dark',
+                    text: '{{ session('success') }}',
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            @endif
+        </script>
+        <script>
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    theme: 'dark',
+                    text: '{{ session('error') }}',
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            @endif
         </script>
     @endpush
 @endsection

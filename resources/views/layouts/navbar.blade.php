@@ -29,6 +29,7 @@
                     <div class="dropdown-menu" aria-labelledby="ui-elementsDropdown">
                         <a class="nav-link pl-lg-2" href="{{ route('item-master.index') }}"><span class="ml-1">Item
                                 Oil</span></a>
+                        <a class="nav-link pl-lg-2" href="#"><span class="ml-1">Users</span></a>
                     </div>
                 </li>
                 {{-- <li class="nav-item">
@@ -271,6 +272,7 @@
                     <span class="avatar avatar-sm mt-2">
                         <img src="{{ asset('design/dark/assets/avatars/face-1.jpg') }}" alt="..."
                             class="avatar-img rounded-circle">
+                        <span class="ml-2">{{ auth()->user()->name }}</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
@@ -281,7 +283,13 @@
                         <a class="nav-link pl-3" href="#">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link pl-3" href="#">Activities</a>
+                        <a class="nav-link pl-3" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
             </li>

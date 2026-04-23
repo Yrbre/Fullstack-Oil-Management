@@ -28,6 +28,7 @@
 <script src='{{ asset('design/dark/js/jquery.dataTables.min.js') }}'></script>
 <script src='{{ asset('design/dark/js/dataTables.bootstrap4.min.js') }}'></script>
 <script src="{{ asset('design/dark/js/apps.js') }}"></script>
+<script src="{{ asset('design/dark/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 
 <script>
     (function($) {

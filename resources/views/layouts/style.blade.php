@@ -18,3 +18,5 @@
 <link rel="stylesheet" href="{{ asset('design/dark/css/app-light.css') }}" id="lightTheme" disabled>
 <link rel="stylesheet" href="{{ asset('design/dark/css/app-dark.css') }}" id="darkTheme">
 <link rel="stylesheet" href="{{ asset('design/dark/css/fa-all.min.css') }}">
+
+<link rel="stylesheet" href="{{ asset('design/dark/sweetalert2/dist/sweetalert2.min.css') }}">
