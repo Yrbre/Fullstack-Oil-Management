@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAdjustmentStockRequest;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Services\Interfaces\ItemMasterServiceInterface;
@@ -114,6 +115,32 @@ class TransactionController extends Controller
             return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menghapus transaksi.');
+        }
+    }
+
+    public function adjustmentStock()
+    {
+        try {
+            $items = $this->itemMasterService->getAll();
+            return view('pages.Transaction.adjustment_stock', compact('items'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memuat halaman adjustment stock.');
+        }
+    }
+
+    public function storeAdjustmentStock(StoreAdjustmentStockRequest $request)
+    {
+        try {
+            $this->transactionService->create(
+                $request->validated(),
+                auth()->user()->name
+            );
+            return redirect()->route('transactions.index')->with('success', 'Adjustment stock berhasil disimpan.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal menyimpan adjustment stock.')
+                ->withInput();
         }
     }
 }

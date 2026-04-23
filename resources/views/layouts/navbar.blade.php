@@ -37,6 +37,29 @@
                     </a>
                 </li> --}}
                 <li class="nav-item dropdown">
+                    <a class="dropdown-toggle nav-link pl-lg-3" href="#" id="appsDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Transaksi </a>
+                    <ul class="dropdown-menu" aria-labelledby="appsDropdown">
+                        <li class="nav-item">
+                            <a class="nav-link pl-lg-2" href="{{ route('transactions.index') }}"><span
+                                    class="ml-1">Supply
+                                    Oil</span></a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle nav-link pl-lg-2" href="#" id="contactDropdown"
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="ml-1">Adjustment</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="contactDropdown">
+                                <a class="nav-link pl-lg-2" href="{{ route('transactions.adjustment-stock') }}"><span
+                                        class="ml-1">Adjustment
+                                        Oil</span></a>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                {{-- <li class="nav-item dropdown">
                     <a href="#" id="formsDropdown" class="dropdown-toggle nav-link" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="ml-lg-2">Transaksi</span>
@@ -45,8 +68,8 @@
                         <a class="nav-link pl-lg-2" href="{{ route('transactions.index') }}"><span class="ml-1">Supply
                                 Oil</span></a>
                     </div>
-                </li>
-                <li class="nav-item dropdown">
+                </li> --}}
+                {{-- <li class="nav-item dropdown">
                     <a href="#" id="formsDropdown" class="dropdown-toggle nav-link" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="ml-lg-2">Monitoring</span>
@@ -55,7 +78,7 @@
                         <a class="nav-link pl-lg-2" href="{{ route('transactions.index') }}"><span
                                 class="ml-1">Transaksi Oil</span></a>
                     </div>
-                </li>
+                </li> --}}
                 {{-- <li class="nav-item dropdown">
                     <a href="#" id="tablesDropdown" class="dropdown-toggle nav-link" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
