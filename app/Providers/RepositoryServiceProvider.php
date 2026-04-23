@@ -4,21 +4,23 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-// Interfaces
-use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
-use App\Repositories\Interfaces\TransactionRepositoryInterface;
+// User
+use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\Interfaces\UserServiceInterface;
+use App\Services\UserService;
 
-// Implementations
-use App\Repositories\Eloquent\ItemMasterRepository;
-use App\Repositories\Eloquent\TransactionRepository;
-
-// Services ItemMaster
+// ItemMaster
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
+use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
+use App\Repositories\Eloquent\ItemMasterRepository;
 
-// Services Transaction
+//Transaction
 use App\Services\ItemMasterService;
 use App\Services\TransactionService;
+use App\Repositories\Interfaces\TransactionRepositoryInterface;
+use App\Repositories\Eloquent\TransactionRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -43,6 +45,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             TransactionServiceInterface::class,
             TransactionService::class
+        );
+
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
+        );
+
+        $this->app->bind(
+            UserServiceInterface::class,
+            UserService::class
         );
     }
 

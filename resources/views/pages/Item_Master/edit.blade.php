@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header">
-                    <strong class="card-title">Form Create Item Oil</strong>
+                    <strong class="card-title">Form Edit Item Oil</strong>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('item-master.update', $item->id) }}">

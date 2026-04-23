@@ -32,9 +32,6 @@ class UserService implements UserServiceInterface
 
     public function update($id, array $data)
     {
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        }
         return $this->userRepository->update($id, $data);
     }
 

@@ -3,8 +3,8 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-start">
-                <h2 class="page-title"> <i class="fa fa-droplet" style="color:#DBCF5C "></i> Item Oil Master</h2>
-                <a href="{{ route('item-master.create') }}" class="btn btn-primary">Add Item</a>
+                <h2 class="page-title"> <i class="fa-solid fa-users text-info"></i> Users</h2>
+                <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>
             </div>
             <div class="row my-4">
                 <!-- Small table -->
@@ -16,25 +16,25 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Item ID</th>
-                                        <th>Item No</th>
-                                        <th>Item Desc</th>
-                                        <th>Current Stock</th>
-                                        <th>Item Uom</th>
-                                        <th>GL Class</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Designation</th>
+                                        <th>Organization Code</th>
+                                        <th>Status</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($items as $item)
+                                    @foreach ($users as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->item_id }}</td>
-                                            <td>{{ $item->item_no }}</td>
-                                            <td>{{ $item->item_desc }}</td>
-                                            <td>{{ $item->current_stock ?? 'N/A' }}</td>
-                                            <td>{{ $item->item_uom }}</td>
-                                            <td>{{ $item->item_glclass }}</td>
+                                            <td>{{ $item->name }}</td>
+                                            <td>{{ $item->email }}</td>
+                                            <td>{{ $item->designation }}</td>
+                                            <td>{{ $item->orgn_code }}</td>
+                                            <td>{{ $item->status ? 'Active' : 'Inactive' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                             <td>
                                                 <button class="btn btn-sm dropdown-toggle" type="button"
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,7 +42,17 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <a class="dropdown-item"
-                                                        href="{{ route('item-master.edit', $item->id) }}">Edit</a>
+                                                        href="{{ route('users.edit', $item->id) }}">Edit</a>
+                                                    <button class="dropdown-item"
+                                                        onclick="event.preventDefault(); document.getElementById('delete-form-{{ $item->id }}').submit();">
+                                                        Delete
+                                                    </button>
+                                                    <form id="delete-form-{{ $item->id }}"
+                                                        action="{{ route('users.destroy', $item->id) }}" method="POST"
+                                                        style="display: none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>

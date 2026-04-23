@@ -85,7 +85,11 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, string $id)
     {
         try {
-            $this->userService->update($id, $request->validated());
+            $data = collect($request->validated())->except('password')->toArray();
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+            $this->userService->update($id, $data);
             return redirect()->route('users.index')->with('success', 'User Berhasil Diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal Memperbarui User');

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ItemMasterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,7 @@ Route::middleware(['role:admin,manager,staff'])->group(function () {
 });
 
 Route::middleware('role:admin')->group(function () {
+    Route::resource('users', UserController::class);
     Route::resource('item-master', ItemMasterController::class);
 });
 

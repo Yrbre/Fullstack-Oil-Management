@@ -58,28 +58,28 @@ class TransactionService implements TransactionServiceInterface
                 $data['item_uom']  = $item->item_uom;
 
                 $bbQty    = $item->current_stock;
-                $newStock = $bbQty; // ✅ fix bug 2 - inisialisasi default
+                $newStock = $bbQty;
 
                 switch ($data['doc_type']) {
                     case 'PORC':
                         $data['bb_qty']  = $bbQty;
-                        $data['in_qty']  = $data['trans_qty']; // ✅ pakai trans_qty dari form
+                        $data['in_qty']  = $data['trans_qty'];
                         $data['out_qty'] = 0;
                         $data['eb_qty']  = $bbQty + $data['in_qty'];
-                        $newStock        = $bbQty + $data['in_qty']; // ✅ fix bug 2
+                        $newStock        = $bbQty + $data['in_qty'];
                         break;
 
                     case 'CONS':
                         $data['bb_qty']  = $bbQty;
                         $data['in_qty']  = 0;
-                        $data['out_qty'] = $data['trans_qty']; // ✅ pakai trans_qty dari form
+                        $data['out_qty'] = $data['trans_qty'];
                         $data['eb_qty']  = $bbQty - $data['out_qty'];
-                        $newStock        = $bbQty - $data['out_qty']; // ✅ fix bug 2
+                        $newStock        = $bbQty - $data['out_qty'];
                         break;
 
                     case 'ADJI':
                         $data['bb_qty'] = $bbQty;
-                        if ($data['adj_type'] === 'CONS') { // ✅ konsisten uppercase
+                        if ($data['adj_type'] === 'CONS') {
                             $data['in_qty']  = $data['trans_qty'];
                             $data['out_qty'] = 0;
                             $data['eb_qty']  = $bbQty + $data['in_qty'];

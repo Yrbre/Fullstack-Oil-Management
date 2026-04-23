@@ -23,6 +23,30 @@
         </main> <!-- main -->
     </div> <!-- .wrapper -->
     @include('layouts.script')
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                theme: 'dark',
+                text: '{{ session('success') }}',
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        @endif
+    </script>
+    <script>
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                theme: 'dark',
+                text: '{{ session('error') }}',
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        @endif
+    </script>
     @stack('scripts')
 </body>
 

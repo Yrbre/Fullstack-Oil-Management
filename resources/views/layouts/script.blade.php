@@ -53,3 +53,16 @@
         $(window).on('resize', refreshSelect2Width);
     })(jQuery);
 </script>
+
+<script>
+    document.addEventListener('input', function(e) {
+        if (e.target.matches('.uppercase')) {
+            let start = e.target.selectionStart;
+            let end = e.target.selectionEnd;
+
+            e.target.value = e.target.value.toUpperCase();
+
+            e.target.setSelectionRange(start, end);
+        }
+    });
+</script>
