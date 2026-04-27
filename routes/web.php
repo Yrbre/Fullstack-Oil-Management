@@ -34,6 +34,7 @@ Route::middleware(['role:admin,manager,staff'])->group(function () {
     Route::get('/transactions/adjustment-stock', [TransactionController::class, 'adjustmentStock'])->name('transactions.adjustment-stock');
     Route::post('/transactions/adjustment-stock', [TransactionController::class, 'storeAdjustmentStock'])->name('transactions.store-adjustment-stock');
     Route::resource('transactions', TransactionController::class);
+    Route::get('/item-master/{id}/detail', [ItemMasterController::class, 'detail'])->name('item-master.detail');
 });
 
 Route::middleware('role:admin')->group(function () {

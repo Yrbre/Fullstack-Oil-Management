@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white flex-row border-bottom shadow">
     <div class="container-fluid">
-        <a class="navbar-brand mx-lg-1 mr-0" href="./index.html">
+        <a class="navbar-brand mx-lg-1 mr-0" href="{{ route('dashboard') }}">
             <svg version="1.1" id="logo" class="navbar-brand-img brand-sm" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">
                 <g>

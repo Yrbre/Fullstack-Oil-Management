@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Item\StoreItemRequest;
 use App\Http\Requests\Item\UpdateItemRequest;
 use App\Services\Interfaces\ItemMasterServiceInterface;
-use Illuminate\Http\Request;
 
 class ItemMasterController extends Controller
 {
@@ -112,6 +111,18 @@ class ItemMasterController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'An error occurred while deleting the item: ' . $e->getMessage());
+        }
+    }
+
+    public function detail($id)
+    {
+        try {
+            $item = $this->itemMasterService->getById($id);
+            return view('pages.Item_Master.detail', compact('item'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'An error occurred while fetching the item details: ' . $e->getMessage());
         }
     }
 }

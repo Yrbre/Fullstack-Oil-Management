@@ -70,7 +70,7 @@
                                         <option value="" disabled selected>-- Select Item No --</option>
                                         @foreach ($items as $item)
                                             <option value="{{ $item->id }}" data-uom="{{ $item->item_uom }}"
-                                                data-current="{{ $item->current_stock }}"
+                                                data-current="{{ $item->current_stock ?? 0 }}"
                                                 {{ old('item_id') == $item->id ? 'selected' : '' }}>
                                                 {{ $item->item_no }} - {{ $item->item_desc }}
                                             </option>
@@ -174,7 +174,7 @@
                     const stock = selectedOption.data('current');
 
                     $('input[name="item_uom"]').val(uom || '');
-                    $('input[name="current_stock"]').val(stock ?? '');
+                    $('input[name="current_stock"]').val(stock ?? 0);
                 });
 
                 // Handle old value saat validasi gagal (page reload)
@@ -184,7 +184,7 @@
 
                 if (initialUom) $('input[name="item_uom"]').val(initialUom);
                 if (initialStock !== undefined) $('input[name="current_stock"]').val(
-                    initialStock);
+                    initialStock ?? 0);
             });
         </script>
         <script>
