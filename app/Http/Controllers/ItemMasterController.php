@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Item\StoreItemRequest;
 use App\Http\Requests\Item\UpdateItemRequest;
 use App\Services\Interfaces\ItemMasterServiceInterface;
+use Illuminate\Http\Request;
 
 class ItemMasterController extends Controller
 {
@@ -114,11 +115,16 @@ class ItemMasterController extends Controller
         }
     }
 
-    public function detail($id)
+    public function detail($id, Request $request)
     {
         try {
-            $item = $this->itemMasterService->getById($id);
-            return view('pages.Item_Master.detail', compact('item'));
+            $month = $request->get('month', now()->month);
+            $year  = $request->get('year', now()->year);
+
+            $item         = $this->itemMasterService->getById($id);
+            $transactions = $this->itemMasterService->getTransactionByMonth($id, $month, $year);
+
+            return view('pages.Item_Master.detail', compact('item', 'transactions', 'month', 'year'));
         } catch (\Exception $e) {
             return redirect()
                 ->back()

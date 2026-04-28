@@ -13,4 +13,6 @@ interface ItemMasterServiceInterface
     public function update($id, array $data);
 
     public function delete($id);
+
+    public function getTransactionByMonth($id, int $month, int $year);
 }

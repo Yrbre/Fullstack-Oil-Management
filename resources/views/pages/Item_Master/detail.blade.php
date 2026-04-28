@@ -11,18 +11,26 @@
                         <h5 class="p-4">Detail Item</h5>
                     </div>
                     <div class="col-auto">
-                        <form class="form-inline">
-                            <div class="form-group d-none d-lg-inline">
-                                <label for="reportrange" class="sr-only">Date Ranges</label>
-                                <div id="reportrange" class="px-2 py-2 text-muted">
-                                    <span class="small"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-sm"><span
-                                        class="fe fe-refresh-ccw fe-16 text-muted"></span></button>
-                                <button type="button" class="btn btn-sm mr-2"><span
-                                        class="fe fe-filter fe-16 text-muted"></span></button>
+                        <form method="GET" action="{{ route('item-master.detail', $item->id) }}" id="filterForm">
+                            <div class="d-flex align-items-center" style="gap: 0.5rem;">
+
+                                <select name="month" class="form-control" style="width: 140px;"
+                                    onchange="this.form.submit()">
+                                    @foreach (range(1, 12) as $m)
+                                        <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
+                                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <select name="year" class="form-control" style="width: 100px;"
+                                    onchange="this.form.submit()">
+                                    @foreach (range(now()->year, 2020, -1) as $y)
+                                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                            {{ $y }}</option>
+                                    @endforeach
+                                </select>
+
                             </div>
                         </form>
                     </div>
@@ -38,7 +46,7 @@
                                     </div>
                                     <div class="col-11">
                                         <small class="text-muted mb-1">NO ITEM</small>
-                                        <h3 class="card-title mb-0">1-02-002-0048</h3>
+                                        <h3 class="card-title mb-0">{{ $item->item_no }}</h3>
 
                                     </div>
                                 </div> <!-- /. row -->
@@ -54,7 +62,7 @@
                                     </div>
                                     <div class="col-11">
                                         <small class="text-muted mb-1">TYPE ITEM</small>
-                                        <h3 class="card-title mb-0">SF 805S</h3>
+                                        <h3 class="card-title mb-0">{{ $item->item_desc }}</h3>
                                     </div>
                                 </div> <!-- /. row -->
                             </div> <!-- /. card-body -->
@@ -69,7 +77,7 @@
                                     </div>
                                     <div class="col-11">
                                         <small class="text-muted mb-1">SATUAN</small>
-                                        <h3 class="card-title mb-0">KG</h3>
+                                        <h3 class="card-title mb-0">{{ $item->item_uom }}</h3>
                                     </div>
                                 </div> <!-- /. row -->
                             </div> <!-- /. card-body -->
@@ -91,23 +99,33 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>01 October 2024</td>
-                                            <td>1000</td>
-                                            <td>50</td>
-                                            <td>10</td>
-                                            <td>1040</td>
-                                        </tr>
+                                        @forelse($transactions as $trans)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($trans->trans_date)->format('d F Y') }}</td>
+                                                <td>{{ number_format($trans->bb_qty, 0, ',', '.') }}</td>
+                                                <td>{{ number_format($trans->in_qty, 0, ',', '.') }}</td>
+                                                <td>{{ number_format($trans->out_qty, 0, ',', '.') }}</td>
+                                                <td>{{ number_format($trans->eb_qty, 0, ',', '.') }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted">
+                                                    Tidak ada transaksi untuk periode ini
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Total</th>
-                                            <th>1000</th>
-                                            <th>50</th>
-                                            <th>10</th>
-                                            <th>1040</th>
-                                        </tr>
-                                    </tfoot>
+                                    @if ($transactions->isNotEmpty())
+                                        <tfoot>
+                                            <tr>
+                                                <th>Total</th>
+                                                <th>-</th>
+                                                <th>{{ number_format($transactions->sum('in_qty'), 0, ',', '.') }}</th>
+                                                <th>{{ number_format($transactions->sum('out_qty'), 0, ',', '.') }}</th>
+                                                <th>{{ number_format($transactions->last()->eb_qty, 0, ',', '.') }}</th>
+                                            </tr>
+                                        </tfoot>
+                                    @endif
                                 </table>
                             </div> <!-- .card-body -->
                         </div> <!-- .card -->

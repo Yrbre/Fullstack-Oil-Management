@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\IcTransInv;
 use App\Repositories\Eloquent\ItemMasterRepository;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 
@@ -39,5 +40,17 @@ class ItemMasterService implements ItemMasterServiceInterface
     public function delete($id)
     {
         return $this->itemMasterRepository->delete($id);
+    }
+
+    public function getTransactionByMonth($id, int $month, int $year)
+    {
+        $bln = str_pad($month, 2, '0', STR_PAD_LEFT);
+        $thn = (string) $year;
+
+        return IcTransInv::where('item_id', $id)
+            ->where('bln', $bln)
+            ->where('thn', $thn)
+            ->orderBy('trans_date', 'asc')
+            ->get();
     }
 }
