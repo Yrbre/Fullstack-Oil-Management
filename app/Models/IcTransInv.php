@@ -53,6 +53,6 @@ class IcTransInv extends Model
 
     public function item()
     {
-        return $this->belongsTo(IcItemMst::class, 'item_id', 'item_id');
+        return $this->belongsTo(IcItemMst::class, 'item_id', 'id');
     }
 }

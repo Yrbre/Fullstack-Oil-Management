@@ -34,6 +34,6 @@ class IcItemMst extends Model
 
     public function transaction()
     {
-        return $this->hasMany(IcTransInv::class, 'item_id', 'item_id');
+        return $this->hasMany(IcTransInv::class, 'item_id', 'id');
     }
 }

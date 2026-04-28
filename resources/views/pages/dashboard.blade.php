@@ -3,7 +3,35 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <!-- widgets -->
+
+                {{-- Header + Filter --}}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0 font-weight-bold">Dashboard Finish Oil</h4>
+
+
+                    <form method="GET" action="{{ route('dashboard') }}" id="filterForm">
+                        <div class="d-flex align-items-center" style="gap: 0.5rem;">
+
+                            <select name="month" class="form-control" style="width: 140px;" onchange="this.form.submit()">
+                                @foreach (range(1, 12) as $m)
+                                    <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
+                                        {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <select name="year" class="form-control" style="width: 100px;" onchange="this.form.submit()">
+                                @foreach (range(now()->year, 2020, -1) as $y)
+                                    <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                        {{ $y }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </form>
+
+                </div>
+
                 <div class="row my-4">
                     <div class="col-md-4">
                         <div class="card shadow mb-4">
@@ -14,7 +42,7 @@
                                             Item</h3>
                                     </div>
                                     <div class="col-4 text-right">
-                                        <h3 class="card-title mb-0">1168</h3>
+                                        <h3 class="card-title mb-0" id="kpiTotalItem">{{ $summary['total_item'] }} Item</h3>
                                     </div>
                                 </div> <!-- /. row -->
                             </div> <!-- /. card-body -->
@@ -29,7 +57,9 @@
                                             Consumption</h3>
                                     </div>
                                     <div class="col-4 text-right">
-                                        <h3 class="card-title mb-0">68 KG</h3>
+                                        <h3 class="card-title mb-0" id="kpiTotalConsumption">
+                                            {{ number_format($summary['total_consumption'], 0, ',', '.') }}
+                                        </h3>
                                     </div>
                                 </div> <!-- /. row -->
                             </div> <!-- /. card-body -->
@@ -44,7 +74,9 @@
                                             Received</h3>
                                     </div>
                                     <div class="col-4 text-right">
-                                        <h3 class="card-title mb-0">108 KG</h3>
+                                        <h3 class="card-title mb-0" id="kpiTotalReceipt">
+                                            {{ number_format($summary['total_receipt'], 0, ',', '.') }}
+                                        </h3>
                                     </div>
                                 </div> <!-- /. row -->
                             </div> <!-- /. card-body -->
@@ -61,37 +93,24 @@
                                             <th>NO</th>
                                             <th>NO ITEM</th>
                                             <th>ITEM NAME</th>
-                                            <th>SATUAN</th>
-                                            <th>TOTAL RECEIVED</th>
-                                            <th>TOTAL CONSUMPTION</th>
                                             <th>END STOCK</th>
                                             <th>ACTION</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>001</td>
-                                            <td>Solar</td>
-                                            <td>KG</td>
-                                            <td>108</td>
-                                            <td>68</td>
-                                            <td>40</td>
-                                            <td><a href="{{ route('item-master.detail', ['id' => 1]) }}"
-                                                    class="btn btn-sm btn-primary">Detail</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>002</td>
-                                            <td>Diesel</td>
-                                            <td>KG</td>
-                                            <td>200</td>
-                                            <td>150</td>
-                                            <td>50</td>
-                                            <td><a href="{{ route('item-master.detail', ['id' => 2]) }}"
-                                                    class="btn btn-sm btn-primary">Detail</a></td>
-                                        </tr>
-                                        <!-- Add more rows as needed -->
+                                        @foreach ($items as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->item_no }}</td>
+                                                <td>{{ $item->item_desc }}</td>
+                                                <td>{{ number_format($item->current_stock, 0, ',', '.') }}
+                                                    {{ $item->item_uom }}</td>
+                                                <td>
+                                                    <a href="{{ route('item-master.detail', $item->id) }}"
+                                                        class="btn btn-sm btn-primary">Detail</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div> <!-- .card-body -->
