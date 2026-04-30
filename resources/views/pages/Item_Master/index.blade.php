@@ -42,6 +42,8 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <a class="dropdown-item"
+                                                        href="{{ route('item-master.detail', $item->id) }}">Detail</a>
+                                                    <a class="dropdown-item"
                                                         href="{{ route('item-master.edit', $item->id) }}">Edit</a>
                                                 </div>
                                             </td>
