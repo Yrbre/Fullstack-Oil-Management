@@ -25,6 +25,7 @@ class StoreItemRequest extends FormRequest
             'item_id'       => 'required|integer|unique:ic_item_mst,item_id',
             'item_no'       => 'required|string|unique:ic_item_mst,item_no',
             'item_desc'     => 'required|string',
+            'orgn_code'     => 'required|string',
             'item_uom'      => 'required|string',
             'item_glclass'  => 'required|string',
             'current_stock' => 'required|string',

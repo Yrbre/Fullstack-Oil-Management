@@ -10,32 +10,15 @@
                     <form method="POST" id="myForm" action="{{ route('transactions.store') }}">
                         @csrf
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="">Orgn Code</label>
-                                <select class="form-control @error('orgn_code') is-invalid @enderror" name="orgn_code">
-                                    <option value="" disabled selected>-- Select Orgn Code --</option>
-                                    <option value="SFPL" {{ old('orgn_code') == 'SFPL' ? 'selected' : '' }}>SFPL</option>
-                                    <option value="FY1" {{ old('orgn_code') == 'FY1' ? 'selected' : '' }}>FY1</option>
-                                    <option value="FY2" {{ old('orgn_code') == 'FY2' ? 'selected' : '' }}>FY2</option>
-                                    <option value="FY3" {{ old('orgn_code') == 'FY3' ? 'selected' : '' }}>FY3</option>
-                                    <option value="P-BX" {{ old('orgn_code') == 'P-BX' ? 'selected' : '' }}>P-BX</option>
-                                    <option value="P-CP" {{ old('orgn_code') == 'P-CP' ? 'selected' : '' }}>P-CP</option>
-                                </select>
-                                @error('orgn_code')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="" class="form-label">Status</label>
-                                <input type="text" class="form-control @error('status') is-invalid @enderror"
-                                    name="status" value="NEW" readonly>
-                                @error('status')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-4"> --}}
+                            {{-- <label for="">Orgn Code</label> --}}
+                            <input type="text" class="form-control @error('orgn_code') is-invalid @enderror"
+                                name="orgn_code" value="{{ auth()->user()->orgn_code }}" hidden>
+                            @error('orgn_code')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            {{-- </div> --}}
+                            <div class="form-group col-md-1">
                                 <label for="">Trans Date</label>
                                 <input type="date" class="form-control @error('trans_date') is-invalid @enderror"
                                     name="trans_date" id="trans_date" value="{{ old('trans_date') }}">
@@ -43,24 +26,26 @@
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <label for="inputAddress2">Trans Code</label>
-                                <select class="form-control @error('doc_type') is-invalid @enderror" name="doc_type">
-                                    <option value="" disabled selected>-- Select Transaction Code --</option>
-                                    <option value="PORC" {{ old('doc_type') == 'PORC' ? 'selected' : '' }}>PORC
-                                    </option>
-                                    <option value="CONS" {{ old('doc_type') == 'CONS' ? 'selected' : '' }}>CONS
-                                    </option>
-                                    {{-- <option value="ADJI" {{ old('doc_type') == 'ADJI' ? 'selected' : '' }}>ADJI --}}
-                                    </option>
-                                </select>
-                                @error('doc_type')
+                            <div class="form-group col-md-1">
+                                <label for="" class="form-label">Status</label>
+                                <input type="text" class="form-control @error('status') is-invalid @enderror"
+                                    name="status" value="NEW" readonly>
+                                @error('status')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
+
                         </div>
+                        {{-- <div class="form-row"> --}}
+                        {{-- <div class="form-group col-md-3">
+                                <label for="inputAddress2">Trans Code</label> --}}
+                        <input type="text" class="form-control @error('doc_type') is-invalid @enderror" name="doc_type"
+                            value="CONS" hidden>
+                        @error('doc_type')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                        {{-- </div>
+                        </div> --}}
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label for="select2">Item No</label>
@@ -87,7 +72,6 @@
                             <div class="form-group col-md-3">
                                 <label for="">Warehouse</label>
                                 <select class="form-control @error('whse_code') is-invalid @enderror" name="whse_code">
-                                    <option value="" disabled selected>-- Select Warehouse --</option>
                                     <option value="SF1" {{ old('whse_code') == 'SF1' ? 'selected' : '' }}>SF1</option>
                                     <option value="SF2" {{ old('whse_code') == 'SF2' ? 'selected' : '' }}>SF2</option>
                                 </select>
@@ -95,27 +79,15 @@
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="">Location</label>
                                 <select class="form-control @error('whse_loc') is-invalid @enderror" name="whse_loc">
-                                    <option value="" disabled selected>-- Select Warehouse Location --</option>
                                     <option value="SF1 SUPPLIES" {{ old('whse_loc') == 'SF1 SUPPLIES' ? 'selected' : '' }}>
                                         SF1 SUPPLIES</option>
                                     <option value="SF2 SUPPLIES" {{ old('whse_loc') == 'SF2 SUPPLIES' ? 'selected' : '' }}>
                                         SF2 SUPPLIES</option>
                                 </select>
                                 @error('whse_loc')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="inputAddress2">Stock</label>
-                                <input type="text" class="form-control @error('current_stock') is-invalid @enderror"
-                                    name="current_stock" value="" readonly>
-                                @error('current_stock')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -132,6 +104,14 @@
                                 @enderror
                             </div>
                             <div class="form-group col-md-3">
+                                <label for="inputAddress2">Stock</label>
+                                <input type="text" class="form-control @error('current_stock') is-invalid @enderror"
+                                    name="current_stock" value="" readonly>
+                                @error('current_stock')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="inputAddress2">UOM</label>
                                 <input type="text" class="form-control @error('item_uom') is-invalid @enderror"
                                     name="item_uom" value="" readonly>
@@ -139,6 +119,11 @@
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                        </div>
+
+                        <div class="form-row">
+
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-12">

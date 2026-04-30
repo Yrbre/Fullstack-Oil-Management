@@ -27,6 +27,7 @@ class UpdateItemRequest extends FormRequest
             'item_id'       => 'sometimes|integer|unique:ic_item_mst,item_id,' . $this->route('item_master'),
             'item_no'       => 'sometimes|string|unique:ic_item_mst,item_no,' . $this->route('item_master'),
             'item_desc'     => 'sometimes|string',
+            'orgn_code'     => 'sometimes|string',
             'item_uom'      => 'sometimes|string',
             'item_glclass'  => 'sometimes|string',
             'current_stock' => 'sometimes|string',

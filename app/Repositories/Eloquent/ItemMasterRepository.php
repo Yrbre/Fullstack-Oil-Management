@@ -8,7 +8,7 @@ use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
 
 class ItemMasterRepository implements ItemMasterRepositoryInterface
 {
-    protected $model;
+    protected IcItemMst $model;
 
     public function __construct(IcItemMst $model)
     {
@@ -20,7 +20,7 @@ class ItemMasterRepository implements ItemMasterRepositoryInterface
         return $this->model->all();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->model->findOrfail($id);
     }
@@ -30,16 +30,21 @@ class ItemMasterRepository implements ItemMasterRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
         $item = $this->model->findOrfail($id);
         $item->update($data);
         return $item;
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         $item = $this->model->findOrfail($id);
         return $item->delete();
+    }
+
+    public function getByOrgnCode(string $orgnCode)
+    {
+        return $this->model->where('orgn_code', $orgnCode)->get();
     }
 }

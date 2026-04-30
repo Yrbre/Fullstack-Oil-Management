@@ -9,7 +9,7 @@ use App\Services\Interfaces\ItemMasterServiceInterface;
 class ItemMasterService implements ItemMasterServiceInterface
 {
 
-    protected $itemMasterRepository;
+    protected ItemMasterRepository $itemMasterRepository;
 
     public function __construct(ItemMasterRepository $itemMasterRepository)
     {
@@ -21,7 +21,7 @@ class ItemMasterService implements ItemMasterServiceInterface
         return $this->itemMasterRepository->getAll();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->itemMasterRepository->getById($id);
     }
@@ -32,17 +32,17 @@ class ItemMasterService implements ItemMasterServiceInterface
         return $this->itemMasterRepository->create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
         return $this->itemMasterRepository->update($id, $data);
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         return $this->itemMasterRepository->delete($id);
     }
 
-    public function getTransactionByMonth($id, int $month, int $year)
+    public function getTransactionByMonth(int $id, int $month, int $year)
     {
 
 
@@ -113,5 +113,10 @@ class ItemMasterService implements ItemMasterServiceInterface
         }
 
         return collect($allDates);
+    }
+
+    public function getByOrgnCode(string $orgnCode)
+    {
+        return $this->itemMasterRepository->getByOrgnCode($orgnCode);
     }
 }

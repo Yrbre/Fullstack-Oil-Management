@@ -10,22 +10,23 @@
                     <form method="POST" id="myForm" action="{{ route('transactions.store-adjustment-stock') }}">
                         @csrf
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="">Orgn Code</label>
-                                <select class="form-control @error('orgn_code') is-invalid @enderror" name="orgn_code">
-                                    <option value="" disabled selected>-- Select Orgn Code --</option>
-                                    <option value="SFPL" {{ old('orgn_code') == 'SFPL' ? 'selected' : '' }}>SFPL</option>
-                                    <option value="FY1" {{ old('orgn_code') == 'FY1' ? 'selected' : '' }}>FY1</option>
-                                    <option value="FY2" {{ old('orgn_code') == 'FY2' ? 'selected' : '' }}>FY2</option>
-                                    <option value="FY3" {{ old('orgn_code') == 'FY3' ? 'selected' : '' }}>FY3</option>
-                                    <option value="P-BX" {{ old('orgn_code') == 'P-BX' ? 'selected' : '' }}>P-BX</option>
-                                    <option value="P-CP" {{ old('orgn_code') == 'P-CP' ? 'selected' : '' }}>P-CP</option>
-                                </select>
-                                @error('orgn_code')
+                            {{-- <div class="form-group col-md-4">
+                                <label for="">Orgn Code</label> --}}
+                            <input type="text" class="form-control @error('orgn_code') is-invalid @enderror"
+                                name="orgn_code" value="{{ auth()->user()->orgn_code }}" hidden>
+                            @error('orgn_code')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            {{-- </div> --}}
+                            <div class="form-group col-md-1">
+                                <label for="">Trans Date</label>
+                                <input type="date" class="form-control @error('trans_date') is-invalid @enderror"
+                                    name="trans_date" id="trans_date" value="{{ old('trans_date') }}">
+                                @error('trans_date')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-1">
                                 <label for="" class="form-label">Status</label>
                                 <input type="text" class="form-control @error('status') is-invalid @enderror"
                                     name="status" value="NEW" readonly>
@@ -35,14 +36,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="">Trans Date</label>
-                                <input type="date" class="form-control @error('trans_date') is-invalid @enderror"
-                                    name="trans_date" id="trans_date" value="{{ old('trans_date') }}">
-                                @error('trans_date')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
+
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-3">

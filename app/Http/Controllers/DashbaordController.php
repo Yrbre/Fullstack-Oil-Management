@@ -9,8 +9,8 @@ use App\Services\Interfaces\ItemMasterServiceInterface;
 
 class DashbaordController extends Controller
 {
-    protected $dashboardService;
-    protected $itemMasterService;
+    protected DashboardService $dashboardService;
+    protected ItemMasterServiceInterface $itemMasterService;
 
     public function __construct(DashboardService $dashboardService, ItemMasterServiceInterface $itemMasterService)
     {

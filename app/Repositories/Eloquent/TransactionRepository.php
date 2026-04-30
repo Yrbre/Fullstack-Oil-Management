@@ -9,7 +9,7 @@ use App\Repositories\Interfaces\TransactionRepositoryInterface;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
-    protected $model;
+    protected IcTransInv $model;
 
     public function __construct(IcTransInv $model)
     {
@@ -21,12 +21,12 @@ class TransactionRepository implements TransactionRepositoryInterface
         return $this->model->orderBy('creation_date', 'desc')->get();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->model->findOrFail($id);
     }
 
-    public function getByItemId($itemId)
+    public function getByItemId(int $itemId)
     {
         return $this->model->with('item')
             ->where('item_id', $itemId)
@@ -38,14 +38,14 @@ class TransactionRepository implements TransactionRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
         $transaction = $this->model->findOrFail($id);
         $transaction->update($data);
         return $transaction;
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         $transaction = $this->model->findOrFail($id);
         $transaction->update(['status' => 'deleted']);

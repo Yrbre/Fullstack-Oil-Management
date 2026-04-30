@@ -19,13 +19,14 @@ class DashboardService
 
     public function getTotalItem()
     {
-        return IcItemMst::where('deleted_at', null)->count();
+        return IcItemMst::where('deleted_at', null)->where('orgn_code', auth()->user()->orgn_code)->count();
     }
 
     public function getTotalConsumption(int $month, int $year)
     {
         return IcTransInv::where('bln', str_pad($month, 2, '0', STR_PAD_LEFT))
             ->where('thn', (string) $year)
+            ->where('orgn_code', auth()->user()->orgn_code)
             ->sum('out_qty');
     }
 
@@ -33,6 +34,7 @@ class DashboardService
     {
         return IcTransInv::where('bln', str_pad($month, 2, '0', STR_PAD_LEFT))
             ->where('thn', (string) $year)
+            ->where('orgn_code', auth()->user()->orgn_code)
             ->sum('in_qty');
     }
 
@@ -42,6 +44,7 @@ class DashboardService
         $thn = (string) $year;
 
         return IcItemMst::where('inactive_ind', 0)
+            ->where('orgn_code', auth()->user()->orgn_code)
             ->withSum(['transaction as total_consumption' => function ($q) use ($bln, $thn) {
                 $q->where('bln', $bln)->where('thn', $thn);
             }], 'out_qty')

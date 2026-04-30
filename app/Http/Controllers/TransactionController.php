@@ -36,7 +36,7 @@ class TransactionController extends Controller
     public function create()
     {
         try {
-            $items = $this->itemMasterService->getAll();
+            $items = $this->itemMasterService->getByOrgnCode(auth()->user()->orgn_code);
             return view('pages.Transaction.create', compact('items'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data.');
@@ -82,7 +82,7 @@ class TransactionController extends Controller
     {
         try {
             $transaction = $this->transactionService->getById($id);
-            $items = $this->itemMasterService->getAll();
+            $items = $this->itemMasterService->getByOrgnCode(auth()->user()->orgn_code);
             return view('pages.Transaction.edit', compact('transaction', 'items'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
@@ -121,7 +121,7 @@ class TransactionController extends Controller
     public function adjustmentStock()
     {
         try {
-            $items = $this->itemMasterService->getAll();
+            $items = $this->itemMasterService->getByOrgnCode(auth()->user()->orgn_code);
             return view('pages.Transaction.adjustment_stock', compact('items'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat halaman adjustment stock.');

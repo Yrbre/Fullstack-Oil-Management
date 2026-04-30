@@ -83,10 +83,10 @@
                         </div> <!-- /. card -->
                     </div> <!-- /. col -->
                 </div> <!-- end section -->
-                <div class="row">
+                <div class="row my-4">
                     <div class="col-md-12">
-                        <div class="card shadow mb-4">
-                            <div class="card-body px-4">
+                        <div class="card shadow">
+                            <div class="card-body">
                                 <table class="table datatables" id="dataTable-1">
                                     <thead>
                                         <tr>

@@ -38,11 +38,11 @@ Route::middleware(['role:admin,manager,staff'])->group(function () {
     Route::post('/transactions/adjustment-stock', [TransactionController::class, 'storeAdjustmentStock'])->name('transactions.store-adjustment-stock');
     Route::resource('transactions', TransactionController::class);
     Route::get('/item-master/{id}/detail', [ItemMasterController::class, 'detail'])->name('item-master.detail');
+    Route::resource('item-master', ItemMasterController::class);
 });
 
 Route::middleware('role:admin')->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('item-master', ItemMasterController::class);
 });
 
 require __DIR__ . '/auth.php';

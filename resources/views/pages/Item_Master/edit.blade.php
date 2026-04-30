@@ -29,13 +29,45 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputAddress">Item Description</label>
-                            <input type="text" class="form-control @error('item_desc') is-invalid @enderror"
-                                name="item_desc" value="{{ old('item_desc', $item->item_desc) }}">
-                            @error('item_desc')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputAddress">Item Description</label>
+                                <input type="text" class="form-control @error('item_desc') is-invalid @enderror"
+                                    name="item_desc" value="{{ old('item_desc', $item->item_desc) }}">
+                                @error('item_desc')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputAddress2">Organization Code</label>
+                                <select class="form-control @error('orgn_code') is-invalid @enderror" name="orgn_code">
+                                    <option value="" disabled>-- Select Orgn Code --</option>
+                                    <option value="SFPL"
+                                        {{ old('orgn_code', $item->orgn_code) == 'SFPL' ? 'selected' : '' }}>SFPL
+                                    </option>
+                                    <option value="FY1"
+                                        {{ old('orgn_code', $item->orgn_code) == 'FY1' ? 'selected' : '' }}>FY1
+                                    </option>
+                                    <option value="FY2"
+                                        {{ old('orgn_code', $item->orgn_code) == 'FY2' ? 'selected' : '' }}>FY2
+                                    </option>
+                                    <option value="FY3"
+                                        {{ old('orgn_code', $item->orgn_code) == 'FY3' ? 'selected' : '' }}>FY3
+                                    </option>
+                                    <option value="P-BX"
+                                        {{ old('orgn_code', $item->orgn_code) == 'P-BX' ? 'selected' : '' }}>
+                                        P-BX</option>
+                                    <option value="P-CP"
+                                        {{ old('orgn_code', $item->orgn_code) == 'P-CP' ? 'selected' : '' }}>
+                                        P-CP</option>
+                                    <option value="IT"
+                                        {{ old('orgn_code', $item->orgn_code) == 'IT' ? 'selected' : '' }}>IT
+                                    </option>
+                                </select>
+                                @error('orgn_code')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="inputAddress2">GL Class</label>
@@ -65,7 +97,10 @@
                                 @enderror
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('item-master.index') }}" class="btn btn-secondary mr-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </form>
                 </div> <!-- /. card-body -->
             </div> <!-- /. card -->

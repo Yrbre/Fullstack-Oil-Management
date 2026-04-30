@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
-    protected $model;
+    protected User $model;
 
     public function __construct(User $model)
     {
@@ -19,7 +19,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->all();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->model->findOrFail($id);
     }
@@ -29,14 +29,14 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
         $user = $this->model->findOrFail($id);
         $user->update($data);
         return $user;
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         $user = $this->model->findOrFail($id);
         $user->update(['status' => false]);

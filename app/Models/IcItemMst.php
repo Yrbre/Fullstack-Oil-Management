@@ -19,6 +19,7 @@ class IcItemMst extends Model
         'item_id',
         'item_no',
         'item_desc',
+        'orgn_code',
         'item_uom',
         'inactive_ind',
         'item_glclass',

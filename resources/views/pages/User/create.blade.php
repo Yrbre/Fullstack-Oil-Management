@@ -51,9 +51,16 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Organization Code</label>
-                                <input type="text"
-                                    class="form-control uppercase @error('orgn_code') is-invalid @enderror" name="orgn_code"
-                                    value="{{ old('orgn_code') }}">
+                                <select class="form-control @error('orgn_code') is-invalid @enderror" name="orgn_code">
+                                    <option value="" disabled selected>-- Select Orgn Code --</option>
+                                    <option value="SFPL" {{ old('orgn_code') == 'SFPL' ? 'selected' : '' }}>SFPL</option>
+                                    <option value="FY1" {{ old('orgn_code') == 'FY1' ? 'selected' : '' }}>FY1</option>
+                                    <option value="FY2" {{ old('orgn_code') == 'FY2' ? 'selected' : '' }}>FY2</option>
+                                    <option value="FY3" {{ old('orgn_code') == 'FY3' ? 'selected' : '' }}>FY3</option>
+                                    <option value="P-BX" {{ old('orgn_code') == 'P-BX' ? 'selected' : '' }}>P-BX</option>
+                                    <option value="P-CP" {{ old('orgn_code') == 'P-CP' ? 'selected' : '' }}>P-CP</option>
+                                    <option value="IT" {{ old('orgn_code') == 'IT' ? 'selected' : '' }}>IT</option>
+                                </select>
                                 @error('orgn_code')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class RoleMiddleware
 {
-    protected $roleAccess = [
+    protected array $roleAccess = [
         'admin'     => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'adjustment-stock', 'store-adjustment-stock', 'detail'],
         'manager'   => ['index', 'create', 'store', 'edit', 'update', 'adjustment-stock', 'store-adjustment-stock', 'detail'],
         'staff'     => ['index', 'create', 'store', 'adjustment-stock', 'store-adjustment-stock', 'detail'],
