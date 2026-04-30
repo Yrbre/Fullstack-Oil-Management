@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionService implements TransactionServiceInterface
 {
-    protected $transactionRepository;
-    protected $itemMasterRepository;
+    protected TransactionRepositoryInterface $transactionRepository;
+    protected ItemMasterRepositoryInterface $itemMasterRepository;
 
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
@@ -26,12 +26,12 @@ class TransactionService implements TransactionServiceInterface
         return $this->transactionRepository->getAll();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->transactionRepository->getById($id);
     }
 
-    public function getByItemId($itemId)
+    public function getByItemId(string $itemId)
     {
         return $this->transactionRepository->getByItemId($itemId);
     }
@@ -57,6 +57,8 @@ class TransactionService implements TransactionServiceInterface
                 $data['item_desc'] = $item->item_desc;
                 $data['item_uom']  = $item->item_uom;
 
+                // ── Hitung bb_qty, in_qty, out_qty, eb_qty sementara ──
+                // (akan di-overwrite recalculate jika back date)
                 $bbQty    = $item->current_stock;
                 $newStock = $bbQty;
 
@@ -95,9 +97,21 @@ class TransactionService implements TransactionServiceInterface
 
                 $transaction = $this->transactionRepository->create($data);
 
-                $this->itemMasterRepository->update($data['item_id'], [
-                    'current_stock' => $newStock
-                ]);
+                $hasNewerTransactions = DB::table('ic_trans_inv')
+                    ->where('item_id', $data['item_id'])
+                    ->where('id', '!=', $transaction->id)        // exclude row yang baru dibuat
+                    ->where('trans_date', '>=', $transDate->toDateString())
+                    ->exists();
+
+                if ($hasNewerTransactions) {
+                    // Back date → recalculate semua dari tanggal ini
+                    $this->recalculateStockFrom($data['item_id'], $transDate);
+                } else {
+                    // Normal → update current_stock biasa
+                    $this->itemMasterRepository->update($data['item_id'], [
+                        'current_stock' => $newStock,
+                    ]);
+                }
 
                 return $transaction;
             });
@@ -106,7 +120,7 @@ class TransactionService implements TransactionServiceInterface
         }
     }
 
-    public function update($id, array $data, string $updatedBy)
+    public function update(int $id, array $data, string $updatedBy)
     {
         try {
             return DB::transaction(function () use ($id, $data, $updatedBy) {
@@ -131,7 +145,7 @@ class TransactionService implements TransactionServiceInterface
         }
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         try {
             return DB::transaction(function () use ($id) {
@@ -165,5 +179,46 @@ class TransactionService implements TransactionServiceInterface
             // Log error atau lakukan penanganan kesalahan lainnya
             throw new \Exception("Gagal menghapus transaksi: " . $e->getMessage());
         }
+    }
+
+    private function recalculateStockFrom(string $itemId, Carbon $fromDate): void
+    {
+        // 1. Ambil eb_qty terakhir SEBELUM fromDate sebagai starting balance
+        $prevTransaction = DB::table('ic_trans_inv')
+            ->where('item_id', $itemId)
+            ->where('trans_date', '<', $fromDate->toDateString())
+            ->orderBy('trans_date', 'desc')
+            ->orderBy('creation_date', 'desc')
+            ->first();
+
+        $runningBalance = $prevTransaction ? $prevTransaction->eb_qty : 0;
+
+        // 2. Ambil semua transaksi sejak fromDate, urut ascending
+        $transactions = DB::table('ic_trans_inv')
+            ->where('item_id', $itemId)
+            ->where('trans_date', '>=', $fromDate->toDateString())
+            ->orderBy('trans_date', 'asc')
+            ->orderBy('creation_date', 'asc')
+            ->get();
+
+        // 3. Loop recalculate bb_qty & eb_qty tiap baris
+        foreach ($transactions as $trx) {
+            $bbQty = $runningBalance;
+            $ebQty = $bbQty + $trx->in_qty - $trx->out_qty;
+
+            DB::table('ic_trans_inv')
+                ->where('id', $trx->id)
+                ->update([
+                    'bb_qty' => $bbQty,
+                    'eb_qty' => $ebQty,
+                ]);
+
+            $runningBalance = $ebQty;
+        }
+
+        // 4. Update current_stock item master ke eb_qty transaksi terakhir
+        $this->itemMasterRepository->update($itemId, [
+            'current_stock' => $runningBalance,
+        ]);
     }
 }
