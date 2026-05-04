@@ -49,10 +49,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected static function booted()
-    {
-        static::addGlobalScope('active', function ($query) {
-            $query->where('status', true);
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope('active', function ($query) {
+    //         $query->where('status', true);
+    //     });
+    // }
 }

@@ -16,7 +16,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getAll()
     {
-        return $this->model->all();
+        return $this->model->orderBy('name')->get();
     }
 
     public function getById(int $id)

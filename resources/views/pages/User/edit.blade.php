@@ -108,6 +108,19 @@
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group col-md-1">
+                                <label for="inputAddress2">Status</label>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="hidden" name="status" value="0">
+                                    <input type="checkbox"
+                                        class="custom-control-input @error('status') is-invalid @enderror" id="customCheck1"
+                                        name="status" value="1" {{ old('status', $user->status) ? 'checked' : '' }}>
+                                    <label class="custom-control-label" for="customCheck1">Aktif</label>
+                                </div>
+                                @error('status')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="d-flex justify-content-end">
                             <a href="{{ route('users.index') }}" class="btn btn-danger mr-3">Cancel</a>

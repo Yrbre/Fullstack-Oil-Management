@@ -29,6 +29,7 @@ class UpdateUserRequest extends FormRequest
             'gander'            => 'sometimes|string',
             'mobile'            => 'sometimes|string|max:255',
             'designation'       => 'sometimes|string|max:255',
+            'status'            => 'sometimes|boolean',
         ];
         if ($this->filled('password')) {
             $rules['password'] = 'sometimes|string|min:8';
