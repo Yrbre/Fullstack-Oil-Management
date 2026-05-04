@@ -7,7 +7,7 @@
                     <strong class="card-title">Form Edit Item Oil</strong>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('item-master.update', $item->id) }}">
+                    <form method="POST" action="{{ route('item-master.update', $item->id) }}" id="myForm">
                         @csrf
                         @method('PUT')
                         <div class="form-row">
@@ -99,11 +99,26 @@
                         </div>
                         <div class="d-flex justify-content-end">
                             <a href="{{ route('item-master.index') }}" class="btn btn-secondary mr-2">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
                         </div>
                     </form>
                 </div> <!-- /. card-body -->
             </div> <!-- /. card -->
         </div> <!-- /. col -->
     </div> <!-- /. end-section -->
+    @push('scripts')
+        <script>
+            document.getElementById('myForm').addEventListener('submit', function(e) {
+                const btn = document.getElementById('submitBtn');
+
+                if (btn.disabled) {
+                    e.preventDefault(); // cegah submit kedua
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = 'Loading...';
+            });
+        </script>
+    @endpush
 @endsection
