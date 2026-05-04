@@ -45,7 +45,7 @@
                                                         href="{{ route('users.edit', $item->id) }}">Edit</a>
                                                     <button class="dropdown-item"
                                                         onclick="event.preventDefault(); document.getElementById('delete-form-{{ $item->id }}').submit();">
-                                                        Delete
+                                                        Nonaktifkan
                                                     </button>
                                                     <form id="delete-form-{{ $item->id }}"
                                                         action="{{ route('users.destroy', $item->id) }}" method="POST"

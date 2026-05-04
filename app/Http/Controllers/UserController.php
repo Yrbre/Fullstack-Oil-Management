@@ -103,7 +103,7 @@ class UserController extends Controller
     {
         try {
             $this->userService->delete($id);
-            return redirect()->route('users.index')->with('success', 'User Berhasil Dihapus');
+            return redirect()->route('users.index')->with('success', 'User Berhasil Dinonaktifkan');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal Menghapus User');
         }
