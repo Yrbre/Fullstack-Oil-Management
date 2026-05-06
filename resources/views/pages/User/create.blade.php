@@ -40,6 +40,8 @@
                                 <label for="inputAddress2">Designation</label>
                                 <select class="form-control @error('designation') is-invalid @enderror" name="designation">
                                     <option value="">-- Select Designation --</option>
+                                    <option value="admin" {{ old('designation') == 'admin' ? 'selected' : '' }}>Admin
+                                    </option>
                                     <option value="manager" {{ old('designation') == 'manager' ? 'selected' : '' }}>Manager
                                     </option>
                                     <option value="staff" {{ old('designation') == 'staff' ? 'selected' : '' }}>Staff

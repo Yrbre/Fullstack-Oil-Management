@@ -45,6 +45,10 @@ class ItemMasterRepository implements ItemMasterRepositoryInterface
 
     public function getByOrgnCode(string $orgnCode)
     {
-        return $this->model->where('orgn_code', $orgnCode)->get();
+        return $this->model->when($orgnCode !== 'IT', function ($q) use ($orgnCode) {
+            $q->where('orgn_code', $orgnCode);
+        })
+            ->orderBy('item_no')
+            ->get();
     }
 }

@@ -41,6 +41,9 @@
                                 <label for="inputAddress2">Designation</label>
                                 <select class="form-control @error('designation') is-invalid @enderror" name="designation">
                                     <option value="">-- Select Designation --</option>
+                                    <option value="admin"
+                                        {{ old('designation', $user->designation) == 'admin' ? 'selected' : '' }}>Admin
+                                    </option>
                                     <option value="manager"
                                         {{ old('designation', $user->designation) == 'manager' ? 'selected' : '' }}>Manager
                                     </option>

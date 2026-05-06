@@ -19,14 +19,18 @@ class DashboardService
 
     public function getTotalItem()
     {
-        return IcItemMst::where('deleted_at', null)->where('orgn_code', auth()->user()->orgn_code)->count();
+        return IcItemMst::where('deleted_at', null)->when(auth()->user()->orgn_code !== 'IT', function ($q) {
+            $q->where('orgn_code', auth()->user()->orgn_code);
+        })->count();
     }
 
     public function getTotalConsumption(int $month, int $year)
     {
         return IcTransInv::where('bln', str_pad($month, 2, '0', STR_PAD_LEFT))
             ->where('thn', (string) $year)
-            ->where('orgn_code', auth()->user()->orgn_code)
+            ->when(auth()->user()->orgn_code !== 'IT', function ($q) {
+                $q->where('orgn_code', auth()->user()->orgn_code);
+            })
             ->sum('out_qty');
     }
 
@@ -34,7 +38,9 @@ class DashboardService
     {
         return IcTransInv::where('bln', str_pad($month, 2, '0', STR_PAD_LEFT))
             ->where('thn', (string) $year)
-            ->where('orgn_code', auth()->user()->orgn_code)
+            ->when(auth()->user()->orgn_code !== 'IT', function ($q) {
+                $q->where('orgn_code', auth()->user()->orgn_code);
+            })
             ->sum('in_qty');
     }
 
@@ -44,13 +50,17 @@ class DashboardService
         $thn = (string) $year;
 
         return IcItemMst::where('inactive_ind', 0)
-            ->where('orgn_code', auth()->user()->orgn_code)
-            ->withSum(['transaction as total_consumption' => function ($q) use ($bln, $thn) {
-                $q->where('bln', $bln)->where('thn', $thn);
-            }], 'out_qty')
-            ->withSum(['transaction as total_receipt' => function ($q) use ($bln, $thn) {
-                $q->where('bln', $bln)->where('thn', $thn);
-            }], 'in_qty')
+            ->when(auth()->user()->orgn_code !== 'IT', function ($q) {
+                $q->where('orgn_code', auth()->user()->orgn_code);
+            })
+            ->when(auth()->user()->orgn_code === 'IT', function ($q) use ($bln, $thn) {
+                $q->withSum(['transaction as total_consumption' => function ($q) use ($bln, $thn) {
+                    $q->where('bln', $bln)->where('thn', $thn);
+                }], 'out_qty')
+                    ->withSum(['transaction as total_receipt' => function ($q) use ($bln, $thn) {
+                        $q->where('bln', $bln)->where('thn', $thn);
+                    }], 'in_qty');
+            })
             ->orderBy('item_no')
             ->get();
     }

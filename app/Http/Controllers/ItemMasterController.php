@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ItemMasterController extends Controller
 {
 
-    protected $itemMasterService;
+    protected ItemMasterServiceInterface $itemMasterService;
 
     public function __construct(ItemMasterServiceInterface $itemMasterService)
     {
@@ -21,7 +21,7 @@ class ItemMasterController extends Controller
     public function index()
     {
         try {
-            $items = $this->itemMasterService->getAll();
+            $items = $this->itemMasterService->getByOrgnCode(auth()->user()->orgn_code);
             return view('pages.Item_Master.index', compact('items'));
         } catch (\Exception $e) {
             return redirect()
