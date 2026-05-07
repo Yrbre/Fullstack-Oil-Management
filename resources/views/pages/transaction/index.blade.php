@@ -23,7 +23,7 @@
                                         <th>Ending Stock</th>
                                         <th>Status</th>
                                         <th>Remark</th>
-                                        <th>Action</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -47,7 +47,7 @@
                                             <td>{{ number_format($item->eb_qty, 0, ',', '.') }}</td>
                                             <td>{{ $item->status }}</td>
                                             <td>{{ $item->catatan }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <button class="btn btn-sm dropdown-toggle" type="button"
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="text-muted sr-only">Action</span>
@@ -56,7 +56,7 @@
                                                     <a class="dropdown-item"
                                                         href="{{ route('transactions.edit', $item->id) }}">Edit</a>
                                                 </div>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -29,7 +29,16 @@ class StoreTransactionRequest extends FormRequest
             'doc_type'          => 'required|string',
             'whse_code'         => 'required|string',
             'whse_loc'          => 'required|string',
-            'trans_qty'         => 'required|numeric|min:0',
+            'current_stock'     => 'required|numeric',
+            'trans_qty' => [
+                'required',
+                'numeric',
+                'min:0',
+                Rule::when(
+                    $this->doc_type === 'CONS',
+                    ['lte:current_stock']
+                ),
+            ],
             'catatan'           => 'nullable|string',
             'item_uom'          => 'required|string',
         ];

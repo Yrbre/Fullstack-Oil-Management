@@ -42,7 +42,6 @@ class TransactionService implements TransactionServiceInterface
             return DB::transaction(function () use ($data, $createdBy) {
                 $item = $this->itemMasterRepository->getById($data['item_id']);
 
-
                 $data['creation_date'] = now();
                 $data['created_by']    = $createdBy;
                 $data['status']        = 'NEW';
@@ -61,6 +60,7 @@ class TransactionService implements TransactionServiceInterface
                 // (akan di-overwrite recalculate jika back date)
                 $bbQty    = $item->current_stock;
                 $newStock = $bbQty;
+
 
                 switch ($data['doc_type']) {
                     case 'PORC':
@@ -96,11 +96,10 @@ class TransactionService implements TransactionServiceInterface
                 }
 
                 $transaction = $this->transactionRepository->create($data);
-
                 $hasNewerTransactions = DB::table('ic_trans_inv')
                     ->where('item_id', $data['item_id'])
                     ->where('id', '!=', $transaction->id)        // exclude row yang baru dibuat
-                    ->where('trans_date', '>=', $transDate->toDateString())
+                    ->where('trans_date', '>', $transDate->toDateString())
                     ->exists();
 
                 if ($hasNewerTransactions) {
@@ -200,6 +199,7 @@ class TransactionService implements TransactionServiceInterface
             ->orderBy('trans_date', 'asc')
             ->orderBy('creation_date', 'asc')
             ->get();
+
 
         // 3. Loop recalculate bb_qty & eb_qty tiap baris
         foreach ($transactions as $trx) {

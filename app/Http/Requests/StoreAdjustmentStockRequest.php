@@ -33,7 +33,6 @@ class StoreAdjustmentStockRequest extends FormRequest
             'item_uom'          => 'required|string',
             'catatan'           => 'required|string',
             'doc_type'          => 'required|string|in:ADJI',
-
         ];
     }
 }
