@@ -1,5 +1,19 @@
 @extends('layouts.template')
 @section('content')
+    @push('style')
+        <style>
+            .card-body {
+                padding: 1rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table.dataTable {
+                min-width: 800px;
+                /* ✅ paksa lebar minimum tabel */
+            }
+        </style>
+    @endpush
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-start">
@@ -10,7 +24,7 @@
                 <!-- Small table -->
                 <div class="col-md-12">
                     <div class="card shadow">
-                        <div class="card-body">
+                        <div class="card-body" data-simplebar>
                             <!-- table -->
                             <table class="table datatables" id="dataTable-1">
                                 <thead>
@@ -25,7 +39,7 @@
                                         <th>Remark</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody> {{-- ✅ kosongkan tbody --}}
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -39,6 +53,7 @@
             $('#dataTable-1').DataTable({
                 processing: true,
                 serverSide: true,
+                autoWidth: false,
                 ajax: '{{ route('transactions.index') }}',
                 columns: [{
                         data: 'DT_RowIndex',

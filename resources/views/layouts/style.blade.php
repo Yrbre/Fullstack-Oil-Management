@@ -6,6 +6,7 @@
 <!-- Icons CSS -->
 <link rel="stylesheet" href="{{ asset('design/dark/css/feather.css') }}">
 <link rel="stylesheet" href="{{ asset('design/dark/css/dataTables.bootstrap4.css') }}">
+<link rel="stylesheet" href="{{ asset('design/dark/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('design/dark/css/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('design/dark/css/dropzone.css') }}">
 <link rel="stylesheet" href="{{ asset('design/dark/css/uppy.min.css') }}">

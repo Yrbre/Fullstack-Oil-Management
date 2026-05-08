@@ -7,13 +7,14 @@ use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionController extends Controller
 {
-    protected $transactionService;
-    protected $itemMasterService;
+    protected TransactionServiceInterface $transactionService;
+    protected ItemMasterServiceInterface $itemMasterService;
 
     public function __construct(
         TransactionServiceInterface $transactionService,
@@ -29,7 +30,7 @@ class TransactionController extends Controller
                 $transactions = $this->transactionService->getAll();
                 return DataTables::of($transactions)
                     ->addIndexColumn()
-                    ->addColumn('trans_date', fn($row) => \Carbon\Carbon::parse($row->trans_date)->format('d-M-Y'))
+                    ->addColumn('trans_date', fn($row) => Carbon::parse($row->trans_date)->format('d-M-Y'))
                     ->addColumn('trans_qty', function ($row) {
                         if ($row->doc_type == 'PORC') return $row->in_qty;
                         if ($row->doc_type == 'CONS') return $row->out_qty;
