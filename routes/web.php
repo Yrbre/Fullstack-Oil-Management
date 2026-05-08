@@ -40,13 +40,12 @@ Route::middleware(['role:admin,manager,staff'])->group(function () {
     Route::get('/item-master/{id}/detail', [ItemMasterController::class, 'detail'])->name('item-master.detail');
 });
 
-Route::middleware('role:admin')->group(function () {
-    Route::resource('users', UserController::class);
+Route::middleware(['role:admin,manager'])->group(function () {
     Route::resource('item-master', ItemMasterController::class);
 });
 
-Route::middleware('role:manager')->group(function () {
-    Route::resource('item-master', ItemMasterController::class);
+Route::middleware('role:admin')->group(function () {
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__ . '/auth.php';

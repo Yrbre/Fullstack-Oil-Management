@@ -20,6 +20,8 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
+
+
         if (!auth()->check()) {
             return redirect()->back()->with('error', 'Anda Harus Login Terlebih Dahulu');
         }
@@ -27,18 +29,17 @@ class RoleMiddleware
         $user = auth()->user();
         $designation = $user->designation;
 
+        $roles = collect($roles)->flatMap(fn($r) => explode(',', $r))->toArray();
         if (!in_array($designation, $roles)) {
             return redirect()->back()->with('error', 'Anda Tidak Memiliki Akses Untuk Halaman Ini');
         }
 
-        $routeAction = last(explode('.', $request->route()->getName()));
-
+        $routeAction    = last(explode('.', $request->route()->getName()));
         $allowedActions = $this->roleAccess[$designation] ?? [];
 
         if (!in_array($routeAction, $allowedActions)) {
             return redirect()->back()->with('error', 'Anda Tidak Memiliki Akses Untuk Melakukan Aksi Ini');
         }
-
 
         return $next($request);
     }
