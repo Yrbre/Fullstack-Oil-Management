@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,5 +55,10 @@ class IcTransInv extends Model
     public function item()
     {
         return $this->belongsTo(IcItemMst::class, 'item_id', 'id');
+    }
+
+    protected static function newFactory()
+    {
+        return TransactionFactory::new();
     }
 }

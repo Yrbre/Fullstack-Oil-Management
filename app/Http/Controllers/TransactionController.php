@@ -7,6 +7,8 @@ use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class TransactionController extends Controller
 {
@@ -20,11 +22,26 @@ class TransactionController extends Controller
         $this->transactionService = $transactionService;
         $this->itemMasterService = $itemMasterService;
     }
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $transactions = $this->transactionService->getall();
-            return view('pages.Transaction.index', compact('transactions'));
+            if ($request->ajax()) {
+                $transactions = $this->transactionService->getAll();
+                return DataTables::of($transactions)
+                    ->addIndexColumn()
+                    ->addColumn('trans_date', fn($row) => \Carbon\Carbon::parse($row->trans_date)->format('d-M-Y'))
+                    ->addColumn('trans_qty', function ($row) {
+                        if ($row->doc_type == 'PORC') return $row->in_qty;
+                        if ($row->doc_type == 'CONS') return $row->out_qty;
+                        if ($row->doc_type == 'ADJI' && $row->in_qty > 0) return $row->in_qty;
+                        if ($row->doc_type == 'ADJI' && $row->out_qty > 0) return $row->out_qty;
+                        return 'N/a';
+                    })
+                    ->addColumn('eb_qty', fn($row) => number_format($row->eb_qty, 0, ',', '.'))
+                    ->rawColumns([])
+                    ->make(true);
+            }
+            return view('pages.Transaction.index');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }
