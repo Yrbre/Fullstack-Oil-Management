@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{{ asset('design/dark/assets/images/LogoTifico.png') }}">
-    <title>SF Oil Management</title>
+    <title>Oil Management</title>
     <!--CSS -->
     @include('layouts.style')
     @stack('style')

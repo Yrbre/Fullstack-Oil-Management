@@ -20,7 +20,7 @@
                                 @enderror
                                 {{-- </div> --}}
                                 <div class="form-group col-md-3">
-                                    <label for="">Trans Date</label>
+                                    <label for="">Tanggal Transaksi</label>
                                     <input type="date" class="form-control @error('trans_date') is-invalid @enderror"
                                         name="trans_date" id="trans_date" value="{{ old('trans_date') }}">
                                     @error('trans_date')
@@ -49,11 +49,11 @@
                         </div> --}}
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="select2">Item No</label>
+                                    <label for="select2">No Item</label>
                                     <select class="form-control select2 @error('item_id') is-invalid @enderror" name="item_id"
                                         id="select2">
                                         <optgroup label="Available Items">
-                                            <option value="" disabled selected>-- Select Item No --</option>
+                                            <option value="" disabled selected>-- Pilih No Item --</option>
                                             @foreach ($items as $item)
                                                 <option value="{{ $item->id }}" data-uom="{{ $item->item_uom }}"
                                                     data-current="{{ $item->current_stock ?? 0 }}"
@@ -71,7 +71,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-3">
-                                    <label for="">Warehouse</label>
+                                    <label for="">Gudang</label>
                                     <select class="form-control @error('whse_code') is-invalid @enderror" name="whse_code">
                                         <option value="SF1" {{ old('whse_code') == 'SF1' ? 'selected' : '' }}>SF1</option>
                                         <option value="SF2" {{ old('whse_code') == 'SF2' ? 'selected' : '' }}>SF2</option>
@@ -81,7 +81,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="">Location</label>
+                                    <label for="">Lokasi</label>
                                     <select class="form-control @error('whse_loc') is-invalid @enderror" name="whse_loc">
                                         <option value="SF1 SUPPLIES" {{ old('whse_loc') == 'SF1 SUPPLIES' ? 'selected' : '' }}>
                                             SF1 SUPPLIES</option>
@@ -96,7 +96,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-3">
-                                    <label for="inputCity">Trans Quantity</label>
+                                    <label for="inputCity">Quantity Transaksi</label>
                                     <input type="number" step="0.01"
                                         class="form-control @error('trans_qty') is-invalid @enderror" name="trans_qty"
                                         value="{{ old('trans_qty') }}">
@@ -105,7 +105,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="inputAddress2">Stock</label>
+                                    <label for="inputAddress2">Stok</label>
                                     <input type="text" class="form-control @error('current_stock') is-invalid @enderror"
                                         name="current_stock" value="" readonly>
                                     @error('current_stock')
@@ -136,8 +136,8 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('transactions.index') }}" class="btn btn-danger mr-3">CANCEL</a>
-                                <button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
+                                <a href="{{ route('transactions.index') }}" class="btn btn-danger mr-3">Cancel</a>
+                                <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
                     @endcan
@@ -291,8 +291,8 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a href="{{ route('transactions.index') }}" class="btn btn-danger mr-3">CANCEL</a>
-                                <button type="submit" id="submitBtn" class="btn btn-primary">SAVE</button>
+                                <a href="{{ route('transactions.index') }}" class="btn btn-danger mr-3">Cancel</a>
+                                <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
                     @endcan

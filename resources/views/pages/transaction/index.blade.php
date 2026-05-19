@@ -37,12 +37,12 @@
                                         <th>#</th>
                                         <th>Tanggal Transaksi</th>
                                         <th>No Item</th>
-                                        <th>Item Name</th>
+                                        <th>Nama Item</th>
                                         <th>Doc</th>
                                         <th>Quantity Transaksi</th>
-                                        <th>Ending Stock</th>
+                                        <th>Stok Akhir</th>
                                         <th>Status</th>
-                                        <th>Remark</th>
+                                        <th>Catatan</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
