@@ -131,7 +131,8 @@
                                                 <th>{{ number_format($transactions->sum('in_qty'), 0, ',', '.') }}</th>
                                                 <th>{{ number_format($transactions->sum('out_qty'), 0, ',', '.') }}</th>
                                                 <th class="text-success">
-                                                    {{ number_format($transactions->last()->eb_qty, 0, ',', '.') }}</th>
+                                                    {{ $lastTransaction ? number_format($lastTransaction->eb_qty, 0, ',', '.') : 0 }}
+                                                </th>
                                                 <th>{{ number_format($transactions->sum('adj_qty'), 0, ',', '.') }}</th>
                                             </tr>
                                         </tfoot>

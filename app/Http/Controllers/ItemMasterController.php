@@ -123,8 +123,10 @@ class ItemMasterController extends Controller
 
             $item         = $this->itemMasterService->getById($id);
             $transactions = $this->itemMasterService->getTransactionByMonth($id, $month, $year);
+            $lastTransaction = $transactions->last(fn($t) => $t->doc_type !== null);
 
-            return view('pages.Item_Master.detail', compact('item', 'transactions', 'month', 'year'));
+
+            return view('pages.Item_Master.detail', compact('item', 'transactions', 'month', 'year', 'lastTransaction'));
         } catch (\Exception $e) {
             return redirect()
                 ->back()
