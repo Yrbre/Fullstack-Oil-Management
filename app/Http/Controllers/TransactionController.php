@@ -28,6 +28,14 @@ class TransactionController extends Controller
         try {
             if ($request->ajax()) {
                 $transactions = $this->transactionService->getAll();
+
+                if ($request->date_from && $request->date_to) {
+                    $transactions->whereBetween('trans_date', [
+                        $request->date_from,
+                        $request->date_to
+                    ]);
+                }
+
                 return DataTables::of($transactions)
                     ->addIndexColumn()
                     ->addColumn('trans_date', fn($row) => Carbon::parse($row->trans_date)->format('d-M-Y'))

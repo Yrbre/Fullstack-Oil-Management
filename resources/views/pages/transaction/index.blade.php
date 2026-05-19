@@ -25,12 +25,18 @@
                 <div class="col-md-12">
                     <div class="card shadow">
                         <div class="card-body" data-simplebar>
+                            <div class="mb-3 d-flex justify-content-end" style="gap: 0.5rem">
+                                <input type="date" id="filterDateFrom" class="form-control w-auto">
+                                <input type="date" id="filterDateTo" class="form-control w-auto">
+                                <button id="btnFilter" class="btn btn-primary">Filter</button>
+                            </div>
                             <!-- table -->
                             <table class="table datatables" id="dataTable-1">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>Tanggal Transaksi</th>
+                                        <th>No Item</th>
                                         <th>Item Name</th>
                                         <th>Doc</th>
                                         <th>Quantity Transaksi</th>
@@ -50,52 +56,70 @@
     {{-- DataTableScript --}}
     @push('scripts')
         <script>
-            $('#dataTable-1').DataTable({
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: '{{ route('transactions.index') }}',
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
+            $(document).ready(function() {
+                //simpan ke variable
+                let table = $('#dataTable-1').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    autoWidth: false,
+                    ajax: {
+                        url: "{{ route('transactions.index') }}",
+                        data: function(d) {
+                            d.date_from = $('#filterDateFrom').val();
+                            d.date_to = $('#filterDateTo').val();
+                        }
                     },
-                    {
-                        data: 'trans_date',
-                        name: 'trans_date'
-                    },
-                    {
-                        data: 'item_desc',
-                        name: 'item_desc'
-                    },
-                    {
-                        data: 'doc_type',
-                        name: 'doc_type'
-                    },
-                    {
-                        data: 'trans_qty',
-                        name: 'trans_qty',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'eb_qty',
-                        name: 'eb_qty'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'catatan',
-                        name: 'catatan'
-                    },
-                ],
-                lengthMenu: [
-                    [16, 32, 64, -1],
-                    [16, 32, 64, 'All']
-                ]
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'trans_date',
+                            name: 'trans_date'
+                        },
+                        {
+                            data: 'item_no',
+                            name: 'item_no'
+                        },
+                        {
+                            data: 'item_desc',
+                            name: 'item_desc'
+                        },
+                        {
+                            data: 'doc_type',
+                            name: 'doc_type'
+                        },
+                        {
+                            data: 'trans_qty',
+                            name: 'trans_qty',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'eb_qty',
+                            name: 'eb_qty'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
+                        {
+                            data: 'catatan',
+                            name: 'catatan'
+                        },
+                    ],
+                    lengthMenu: [
+                        [16, 32, 64, -1],
+                        [16, 32, 64, 'All']
+                    ]
+                });
+
+                // btnFilter setelah table didefinisikan
+                $('#btnFilter').on('click', function() {
+                    table.draw();
+                });
             });
         </script>
     @endpush
