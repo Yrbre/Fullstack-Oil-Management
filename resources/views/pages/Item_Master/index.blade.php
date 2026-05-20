@@ -32,7 +32,7 @@
                                             <td>{{ $item->item_id }}</td>
                                             <td>{{ $item->item_no }}</td>
                                             <td>{{ $item->item_desc }}</td>
-                                            <td>{{ $item->current_stock ?? 'N/A' }}</td>
+                                            <td>{{ number_format($item->current_stock ?? 0, 1, ',', '.') }}</td>
                                             <td>{{ $item->item_uom }}</td>
                                             <td>{{ $item->item_glclass }}</td>
                                             <td>

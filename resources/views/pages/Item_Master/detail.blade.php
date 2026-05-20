@@ -104,12 +104,12 @@
                                             <tr
                                                 class="{{ $trans->in_qty == 0 && $trans->out_qty == 0 && $trans->adj_qty == 0 ? 'text-muted' : '' }}">
                                                 <td>{{ \Carbon\Carbon::parse($trans->trans_date)->format('d F Y') }}</td>
-                                                <td>{{ number_format($trans->bb_qty, 0, ',', '.') }}</td>
-                                                <td>{{ $trans->in_qty > 0 ? number_format($trans->in_qty, 0, ',', '.') : '-' }}
+                                                <td>{{ number_format($trans->bb_qty, 1, ',', '.') }}</td>
+                                                <td>{{ $trans->in_qty > 0 ? number_format($trans->in_qty, 1, ',', '.') : '-' }}
                                                 </td>
-                                                <td>{{ $trans->out_qty > 0 ? number_format($trans->out_qty, 0, ',', '.') : '-' }}
+                                                <td>{{ $trans->out_qty > 0 ? number_format($trans->out_qty, 1, ',', '.') : '-' }}
                                                 </td>
-                                                <td>{{ number_format($trans->eb_qty, 0, ',', '.') }}</td>
+                                                <td>{{ number_format($trans->eb_qty, 1, ',', '.') }}</td>
                                                 <td>
                                                     @if ($trans->adj_qty)
                                                         <span class="badge badge-warning">ADJUSTMENT</span>
@@ -128,12 +128,12 @@
                                             <tr class="font-weight-bold">
                                                 <th>Total</th>
                                                 <th>-</th>
-                                                <th>{{ number_format($transactions->sum('in_qty'), 0, ',', '.') }}</th>
-                                                <th>{{ number_format($transactions->sum('out_qty'), 0, ',', '.') }}</th>
+                                                <th>{{ number_format($transactions->sum('in_qty'), 1, ',', '.') }}</th>
+                                                <th>{{ number_format($transactions->sum('out_qty'), 1, ',', '.') }}</th>
                                                 <th class="text-success">
-                                                    {{ $lastTransaction ? number_format($lastTransaction->eb_qty, 0, ',', '.') : 0 }}
+                                                    {{ $lastTransaction ? number_format($lastTransaction->eb_qty, 1, ',', '.') : 0 }}
                                                 </th>
-                                                <th>{{ number_format($transactions->sum('adj_qty'), 0, ',', '.') }}</th>
+                                                <th>{{ number_format($transactions->sum('adj_qty'), 1, ',', '.') }}
                                             </tr>
                                         </tfoot>
                                     @endif

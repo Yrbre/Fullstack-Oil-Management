@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="col-4 text-right">
                                         <h3 class="card-title mb-0" id="kpiTotalConsumption">
-                                            {{ number_format($summary['total_consumption'], 0, ',', '.') }}
+                                            {{ number_format((float) $summary['total_consumption'], 1, ',', '.') }}
                                         </h3>
                                     </div>
                                 </div> <!-- /. row -->
@@ -75,7 +75,7 @@
                                     </div>
                                     <div class="col-4 text-right">
                                         <h3 class="card-title mb-0" id="kpiTotalReceipt">
-                                            {{ number_format($summary['total_receipt'], 0, ',', '.') }}
+                                            {{ number_format((float) $summary['total_receipt'], 1, ',', '.') }}
                                         </h3>
                                     </div>
                                 </div> <!-- /. row -->
@@ -103,7 +103,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->item_no }}</td>
                                                 <td>{{ $item->item_desc }}</td>
-                                                <td>{{ number_format($item->current_stock, 0, ',', '.') }}
+                                                <td>{{ number_format((float) $item->current_stock, 1, ',', '.') }}
                                                     {{ $item->item_uom }}</td>
                                                 <td>
                                                     <a href="{{ route('item-master.detail', $item->id) }}"
