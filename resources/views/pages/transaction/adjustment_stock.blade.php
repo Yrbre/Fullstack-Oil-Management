@@ -116,7 +116,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="inputCity">Quantity Transaksi</label>
-                                <input type="number" step="0.01"
+                                <input type="number" step="0.1" min="0"
                                     class="form-control @error('trans_qty') is-invalid @enderror" name="trans_qty"
                                     value="{{ old('trans_qty') }}">
                                 @error('trans_qty')

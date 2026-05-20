@@ -29,7 +29,7 @@ class StoreAdjustmentStockRequest extends FormRequest
             'item_id'           => 'required|string',
             'whse_code'         => 'required|string',
             'whse_loc'          => 'required|string',
-            'trans_qty'         => 'required|numeric',
+            'trans_qty'         => 'required|numeric|min:0|regex:/^\d+(\.\d{1})?$/',
             'item_uom'          => 'required|string',
             'catatan'           => 'required|string',
             'doc_type'          => 'required|string|in:ADJI',

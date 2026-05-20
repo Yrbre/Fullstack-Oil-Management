@@ -40,13 +40,13 @@ class TransactionController extends Controller
                     ->addIndexColumn()
                     ->addColumn('trans_date', fn($row) => Carbon::parse($row->trans_date)->format('d-M-Y'))
                     ->addColumn('trans_qty', function ($row) {
-                        if ($row->doc_type == 'PORC') return $row->in_qty;
-                        if ($row->doc_type == 'CONS') return $row->out_qty;
-                        if ($row->doc_type == 'ADJI' && $row->in_qty > 0) return $row->in_qty;
-                        if ($row->doc_type == 'ADJI' && $row->out_qty > 0) return $row->out_qty;
+                        if ($row->doc_type == 'PORC') return number_format((float)$row->in_qty, 1, ',', '.');
+                        if ($row->doc_type == 'CONS') return number_format((float)$row->out_qty, 1, ',', '.');
+                        if ($row->doc_type == 'ADJI' && $row->in_qty > 0) return number_format((float)$row->in_qty, 1, ',', '.');
+                        if ($row->doc_type == 'ADJI' && $row->out_qty > 0) return number_format((float)$row->out_qty, 1, ',', '.');
                         return 'N/a';
                     })
-                    ->addColumn('eb_qty', fn($row) => number_format($row->eb_qty, 0, ',', '.'))
+                    ->addColumn('eb_qty', fn($row) => number_format((float)$row->eb_qty, 1, ',', '.'))
                     ->rawColumns([])
                     ->make(true);
             }

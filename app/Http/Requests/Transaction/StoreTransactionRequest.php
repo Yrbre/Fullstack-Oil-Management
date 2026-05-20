@@ -34,8 +34,10 @@ class StoreTransactionRequest extends FormRequest
                 'required',
                 'numeric',
                 'min:0',
+                'regex:/^\d+(\.\d{1})?$/',
                 Rule::when(
                     $this->doc_type === 'CONS',
+                    // Jika doc_type adalah 'CONS', pastikan trans_qty tidak melebihi current_stock
                     ['lte:current_stock']
                 ),
             ],
