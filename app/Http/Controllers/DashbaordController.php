@@ -36,12 +36,17 @@ class DashbaordController extends Controller
         $month = $request->month;
         $year = $request->year;
         $itemMaster = $this->itemMasterService->getAll();
+        $top10Consumption = $this->dashboardService->getTop10Consumption($month, $year);
+
+
 
         return view('pages.dashboard', [
             'summary' => $this->dashboardService->getSummary($month, $year),
             'total_item' => $this->dashboardService->getTotalItem(),
             'total_consumption' => $this->dashboardService->getTotalConsumption($month, $year),
             'items'     => $this->dashboardService->getItemsWithConsumption($month, $year),
+            'top10Consumption' => $top10Consumption,
+            'total_consumtionperitem' => $this->dashboardService->getItemsWithConsumption($month, $year)->pluck('total_consumption', 'item_no'),
             'total_receipt' => $this->dashboardService->getTotalReceipt($month, $year),
             'itemMaster' => $itemMaster,
             'month' => $month,

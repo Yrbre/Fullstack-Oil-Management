@@ -83,17 +83,30 @@
                         </div> <!-- /. card -->
                     </div> <!-- /. col -->
                 </div> <!-- end section -->
+                {{-- Setelah row KPI cards, sebelum row tabel --}}
+                <div class="row my-4">
+                    <div class="col-md-12">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <p class="text-center font-weight-bold mb-3">TOP 10 ITEMS CONSUMPTION</p>
+                                <div id="top10Chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row my-4">
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-body">
                                 <table class="table datatables" id="dataTable-1">
                                     <thead>
+                                        <p class="text-center font-weight-bold">TOP ITEMS BY CONSUMPTION</p>
                                         <tr>
                                             <th>NO</th>
                                             <th>NO ITEM</th>
                                             <th>ITEM NAME</th>
                                             <th>END STOCK</th>
+                                            <th>CONSUMPTION</th>
                                             <th>ACTION</th>
                                         </tr>
                                     </thead>
@@ -104,6 +117,8 @@
                                                 <td>{{ $item->item_no }}</td>
                                                 <td>{{ $item->item_desc }}</td>
                                                 <td>{{ number_format((float) $item->current_stock, 1, ',', '.') }}
+                                                    {{ $item->item_uom }}</td>
+                                                <td>{{ number_format((float) $item->total_consumption, 1, ',', '.') }}
                                                     {{ $item->item_uom }}</td>
                                                 <td>
                                                     <a href="{{ route('item-master.detail', $item->id) }}"
@@ -131,6 +146,96 @@
                     [10, 20, 30, 'All']
                 ]
             });
+
+            // APEX CHARTS - TOP 10 CONSUMPTION
+            // ✅ Data dari Laravel
+            var top10Labels = @json($top10Consumption->pluck('item_desc'));
+            var top10Data = @json($top10Consumption->pluck('total_consumption'));
+            var top10Items = @json($top10Consumption->pluck('item_no'));
+            var top10Uoms = @json($top10Consumption->pluck('item_uom'));
+
+            // ✅ ApexCharts
+            var options = {
+                chart: {
+                    type: 'bar',
+                    height: 380,
+                    toolbar: {
+                        show: false
+                    },
+                    background: 'transparent',
+                    offsetX: 0,
+                },
+                theme: {
+                    mode: 'dark'
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 4,
+                        distributed: true,
+                        dataLabels: {
+                            position: 'top'
+                        } // ✅ posisi setelah bar
+                    }
+                },
+                // ✅ Warna per bar — top 3 berbeda
+                colors: top10Data.map(function(val, index) {
+                    if (index === 0) return '#FFD700'; // gold - rank 1
+                    if (index === 1) return '#C0C0C0'; // silver - rank 2
+                    if (index === 2) return '#CD7F32'; // bronze - rank 3
+                    return '#05C7F2'; // default - rank lainnya
+                }),
+                dataLabels: {
+                    enabled: true,
+                    textAnchor: 'start', // ✅ mulai dari ujung bar
+                    offsetX: 10, // ✅ jarak setelah bar
+                    formatter: function(val, {
+                        dataPointIndex
+                    }) {
+                        if (val === 0) return '-';
+                        return new Intl.NumberFormat('id-ID').format(val) + ' ' + top10Uoms[dataPointIndex];
+                    },
+                    style: {
+                        fontSize: '12px',
+                        colors: ['#fff'] // ✅ warna text
+                    },
+                    background: {
+                        enabled: false // ✅ matikan background label
+                    }
+                },
+                series: [{
+                    name: 'Consumption',
+                    data: top10Data
+                }],
+                xaxis: {
+                    categories: top10Labels,
+                    labels: {
+                        formatter: function(val) {
+                            return new Intl.NumberFormat('id-ID').format(val);
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val, {
+                            dataPointIndex
+                        }) {
+                            return top10Items[dataPointIndex] + ' | ' +
+                                new Intl.NumberFormat('id-ID').format(val) + ' ' +
+                                top10Uoms[dataPointIndex];
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                }, // ✅ sembunyikan legend karena distributed
+                grid: {
+                    borderColor: '#444'
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#top10Chart"), options);
+            chart.render();
         </script>
     @endpush
 @endsection
