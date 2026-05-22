@@ -145,6 +145,7 @@
                     @can('admin')
                         <form method="POST" id="myForm" action="{{ route('transactions.store') }}">
                             @csrf
+                            <input type="hidden" name="redirect_to" id="redirect_to" value="index">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="">Orgn Code</label>
@@ -292,6 +293,7 @@
                             </div>
                             <div class="d-flex justify-content-end">
                                 <a href="{{ route('transactions.index') }}" class="btn btn-danger mr-3">Cancel</a>
+                                <button type="button" id="btnSubmitNew" class="btn btn-secondary mr-3">Submit & New</button>
                                 <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
@@ -341,6 +343,18 @@
 
                 btn.disabled = true;
                 btn.textContent = 'Loading...';
+            });
+        </script>
+
+        <script>
+            $('#btnSubmit').on('click', function() {
+                $('#redirect_to').val('index');
+                $(this).closest('form').submit();
+            });
+
+            $('#btnSubmitNew').on('click', function() {
+                $('#redirect_to').val('create');
+                $(this).closest('form').submit();
             });
         </script>
     @endpush

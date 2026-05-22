@@ -27,6 +27,11 @@ class StoreAdjustmentStockRequest extends FormRequest
             'orgn_code'     => 'required|string',
             'trans_date'    => 'required|date',
             'doc_type'      => 'required|string',
+            'adj_type'    => [
+                'required',
+                'string',
+                Rule::in(['PORC', 'CONS']),
+            ],
             'whse_code'     => 'required|string',
             'whse_loc'      => 'required|string',
             'current_stock' => 'required|numeric',
@@ -36,7 +41,7 @@ class StoreAdjustmentStockRequest extends FormRequest
                 'min:0',
                 'regex:/^\d+(\.\d{1})?$/',
             ],
-            'catatan'  => 'nullable|string',
+            'catatan'  => 'required|string',
             'item_uom' => 'required|string',
         ];
     }

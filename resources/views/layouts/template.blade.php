@@ -42,8 +42,7 @@
                 title: 'Error',
                 theme: 'dark',
                 text: '{{ session('error') }}',
-                timer: 2000,
-                showConfirmButton: false,
+                showConfirmButton: true,
             });
         @endif
     </script>

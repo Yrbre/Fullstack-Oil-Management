@@ -96,7 +96,7 @@ class TransactionService implements TransactionServiceInterface
                             $data['out_qty'] = $data['trans_qty'];
                             $data['eb_qty']  = $bbQty - $data['out_qty'];
                             $newStock        = $bbQty - $data['out_qty'];
-                        }
+                        } //OK
                         break;
                 }
 
@@ -105,6 +105,7 @@ class TransactionService implements TransactionServiceInterface
                     ->where('item_id', $data['item_id'])
                     ->where('trans_date', '>', $transDate->toDateString())
                     ->exists();
+
 
                 if ($hasNewerTransactions) {
                     $this->simulateRecalculate(
@@ -251,7 +252,6 @@ class TransactionService implements TransactionServiceInterface
             ->orderBy('trans_date', 'desc')
             ->orderBy('creation_date', 'desc')
             ->first();
-
         // ✅ Jika tidak ada transaksi sebelumnya, ambil dari item master
         $item = $this->itemMasterRepository->getById($itemId);
         $runningBalance = $prevTransaction ? $prevTransaction->eb_qty : $item->current_stock;

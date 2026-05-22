@@ -79,6 +79,9 @@ class TransactionController extends Controller
                 $request->validated(),
                 auth()->user()->name
             );
+            if ($request->input('redirect_to') === 'create') {
+                return redirect()->route('transactions.create')->with('success', 'Transaksi berhasil disimpan.');
+            }
             return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil disimpan.');
         } catch (\Exception $e) {
             return redirect()
@@ -165,7 +168,7 @@ class TransactionController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Gagal menyimpan adjustment stock.')
+                ->with('error', 'Gagal menyimpan adjustment stock.' . $e->getMessage())
                 ->withInput();
         }
     }
