@@ -83,6 +83,7 @@ class ItemMasterService implements ItemMasterServiceInterface
                     'in_qty'     => $receive,
                     'out_qty'    => $consume,
                     'adj_qty'    => $adjQty,
+                    'adj_type'   => $adjiGroup->pluck('adj_type')->unique()->implode(', '),
                     'eb_qty'     => $lastTrx->eb_qty, // ✅ eb dari yang terbaru
                     'doc_type'   => $group->pluck('doc_type')->unique()->implode(', '),
                 ];

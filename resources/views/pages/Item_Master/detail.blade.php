@@ -111,8 +111,11 @@
                                                 </td>
                                                 <td>{{ number_format($trans->eb_qty, 1, ',', '.') }}</td>
                                                 <td>
-                                                    @if ($trans->adj_qty)
-                                                        <span class="badge badge-warning">ADJUSTMENT</span>
+                                                    @if ($trans->adj_type)
+                                                        <a href="{{ route('transactions.show', $trans->id) }}"
+                                                            class="text-decoration-none">
+                                                            <span class="badge badge-warning">ADJUSTMENT</span>
+                                                        </a>
                                                     @endif
                                                 </td>
                                             </tr>

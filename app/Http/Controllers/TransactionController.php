@@ -98,7 +98,11 @@ class TransactionController extends Controller
     {
         try {
             $transaction = $this->transactionService->getById($id);
-            return view('pages.Transaction.show', compact('transaction'));
+            $transSameDate = $this->transactionService->getSameDateTransactions(
+                $transaction->trans_date,
+                $transaction->item_id
+            );
+            return view('pages.Transaction.show', compact('transaction', 'transSameDate'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }

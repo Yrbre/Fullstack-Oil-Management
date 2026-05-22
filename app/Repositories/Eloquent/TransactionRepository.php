@@ -6,6 +6,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\IcTransInv;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
+use Override;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -24,6 +25,16 @@ class TransactionRepository implements TransactionRepositoryInterface
     public function getById(int $id)
     {
         return $this->model->findOrFail($id);
+    }
+
+
+    public function getSameDateTransactions(string $transDate, int $itemId)
+    {
+        return $this->model
+            ->where('item_id', $itemId)
+            ->where('trans_date', $transDate)
+            ->orderBy('creation_date', 'desc')
+            ->get();
     }
 
     public function getByItemId(int $itemId)

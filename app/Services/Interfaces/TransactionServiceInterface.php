@@ -8,6 +8,8 @@ interface TransactionServiceInterface
 
     public function getById(int $id);
 
+    public function getSameDateTransactions(string $transDate, int $itemId);
+
     public function getByItemId(string $itemId);
 
     public function create(array $data, string $createdBy);

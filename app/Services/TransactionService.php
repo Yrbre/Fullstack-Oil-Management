@@ -31,6 +31,11 @@ class TransactionService implements TransactionServiceInterface
         return $this->transactionRepository->getById($id);
     }
 
+    public function getSameDateTransactions(string $transDate, int $itemId)
+    {
+        return $this->transactionRepository->getSameDateTransactions($transDate, $itemId);
+    }
+
     public function getByItemId(string $itemId)
     {
         return $this->transactionRepository->getByItemId($itemId);
