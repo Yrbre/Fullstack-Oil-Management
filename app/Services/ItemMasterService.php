@@ -64,27 +64,26 @@ class ItemMasterService implements ItemMasterServiceInterface
                 $porcGroup = $group->where('doc_type', 'PORC');
                 $adjiGroup = $group->where('doc_type', 'ADJI');
 
-                $adjiCons  = $adjiGroup->where('adj_type', 'CONS');
-                $adjiPorc  = $adjiGroup->where('adj_type', 'PORC');
+                $adjiCons = $adjiGroup->where('adj_type', 'CONS');
+                $adjiPorc = $adjiGroup->where('adj_type', 'PORC');
 
-                // CONSUME = total CONS out_qty - total ADJI CONS in_qty
                 $consume = $consGroup->sum('out_qty') - $adjiCons->sum('in_qty');
-
-                // RECEIVE = total PORC in_qty - total ADJI PORC out_qty
                 $receive = $porcGroup->sum('in_qty') - $adjiPorc->sum('out_qty');
-
-                // ADJ = tetap tampil nilai asli ADJI (positif jika PORC, negatif jika CONS)
-                $adjQty = $adjiPorc->sum('in_qty') - $adjiCons->sum('in_qty');
+                $adjQty  = $adjiPorc->sum('in_qty') - $adjiCons->sum('in_qty');
 
                 $dateKey = $group->first()->thn . '-' . $group->first()->bln . '-' . $group->first()->tgl;
 
+                // ✅ Ambil eb_qty dari transaksi dengan creation_date terbaru
+                $lastTrx = $group->sortByDesc('creation_date')->first();
+
                 return (object) [
+                    'id'         => $group->first()->id,
                     'trans_date' => $dateKey,
-                    'bb_qty'     => $group->first()->bb_qty,
+                    'bb_qty'     => $group->sortBy('creation_date')->first()->bb_qty, // ✅ bb dari yang pertama
                     'in_qty'     => $receive,
                     'out_qty'    => $consume,
                     'adj_qty'    => $adjQty,
-                    'eb_qty'     => $group->last()->eb_qty,
+                    'eb_qty'     => $lastTrx->eb_qty, // ✅ eb dari yang terbaru
                     'doc_type'   => $group->pluck('doc_type')->unique()->implode(', '),
                 ];
             });
@@ -101,6 +100,7 @@ class ItemMasterService implements ItemMasterServiceInterface
                 $allDates[] = $transactions[$key];
             } else {
                 $allDates[] = (object) [
+                    'id'         => null,
                     'trans_date' => $key,
                     'bb_qty'     => 0,
                     'in_qty'     => 0,

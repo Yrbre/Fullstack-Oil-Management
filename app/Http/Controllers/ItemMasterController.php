@@ -123,6 +123,7 @@ class ItemMasterController extends Controller
 
             $item         = $this->itemMasterService->getById($id);
             $transactions = $this->itemMasterService->getTransactionByMonth($id, $month, $year);
+
             $lastTransaction = $transactions->last(fn($t) => $t->doc_type !== null);
 
 
