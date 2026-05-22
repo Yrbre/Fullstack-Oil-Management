@@ -21,18 +21,20 @@
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a href="#" id="ui-elementsDropdown" class="dropdown-toggle nav-link" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="ml-lg-2">Master</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="ui-elementsDropdown">
-                        <a class="nav-link pl-lg-2" href="{{ route('item-master.index') }}"><span class="ml-1">Item
-                                Oil</span></a>
-                        <a class="nav-link pl-lg-2" href="{{ route('users.index') }}"><span
-                                class="ml-1">Users</span></a>
-                    </div>
-                </li>
+                @can('admin')
+                    <li class="nav-item dropdown">
+                        <a href="#" id="ui-elementsDropdown" class="dropdown-toggle nav-link" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="ml-lg-2">Master</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="ui-elementsDropdown">
+                            <a class="nav-link pl-lg-2" href="{{ route('item-master.index') }}"><span class="ml-1">Item
+                                    Oil</span></a>
+                            <a class="nav-link pl-lg-2" href="{{ route('users.index') }}"><span
+                                    class="ml-1">Users</span></a>
+                        </div>
+                    </li>
+                @endcan
                 {{-- <li class="nav-item">
                     <a class="nav-link" href="widgets.html">
                         <span class="ml-lg-2">Widgets</span>
@@ -48,17 +50,19 @@
                                     class="ml-1">Supply
                                     Oil</span></a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="dropdown-toggle nav-link pl-lg-2" href="#" id="contactDropdown"
-                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="ml-1">Adjustment</span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="contactDropdown">
-                                <a class="nav-link pl-lg-2" href="{{ route('transactions.adjustment-stock') }}"><span
-                                        class="ml-1">Adjustment
-                                        Oil</span></a>
-                            </ul>
-                        </li>
+                        @can('admin')
+                            <li class="nav-item dropdown">
+                                <a class="dropdown-toggle nav-link pl-lg-2" href="#" id="contactDropdown"
+                                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="ml-1">Adjustment</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="contactDropdown">
+                                    <a class="nav-link pl-lg-2" href="{{ route('transactions.adjustment-stock') }}"><span
+                                            class="ml-1">Adjustment
+                                            Oil</span></a>
+                                </ul>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
                 {{-- <li class="nav-item dropdown">

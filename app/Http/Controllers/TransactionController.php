@@ -83,7 +83,7 @@ class TransactionController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Gagal menyimpan transaksi.')
+                ->with('error', 'Gagal menyimpan transaksi.' . $e->getMessage())
                 ->withInput();
         }
     }

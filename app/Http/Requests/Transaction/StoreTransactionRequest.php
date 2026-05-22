@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreTransactionRequest extends FormRequest
 {
@@ -23,26 +22,46 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'item_id'           => 'required|string',
-            'orgn_code'         => 'required|string',
-            'trans_date'        => 'required|date',
-            'doc_type'          => 'required|string',
-            'whse_code'         => 'required|string',
-            'whse_loc'          => 'required|string',
-            'current_stock'     => 'required|numeric',
-            'trans_qty' => [
+            'item_id'       => 'required|string',
+            'orgn_code'     => 'required|string',
+            'trans_date'    => 'required|date',
+            'doc_type'      => 'required|string',
+            'whse_code'     => 'required|string',
+            'whse_loc'      => 'required|string',
+            'current_stock' => 'required|numeric',
+            'trans_qty'     => [
                 'required',
                 'numeric',
                 'min:0',
                 'regex:/^\d+(\.\d{1})?$/',
-                Rule::when(
-                    $this->doc_type === 'CONS',
-                    // Jika doc_type adalah 'CONS', pastikan trans_qty tidak melebihi current_stock
-                    ['lte:current_stock']
-                ),
             ],
-            'catatan'           => 'nullable|string',
-            'item_uom'          => 'required|string',
+            'catatan'  => 'nullable|string',
+            'item_uom' => 'required|string',
         ];
+    }
+
+    // ✅ Tambahkan ini
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $docType      = $this->doc_type;
+            $transQty     = (float) $this->trans_qty;
+            $currentStock = (float) $this->current_stock;
+
+            if ($docType === 'CONS' && $transQty > $currentStock) {
+                $validator->errors()->add(
+                    'trans_qty',
+                    'Quantity tidak boleh melebihi current stock (' . number_format($currentStock, 0, ',', '.') . ').'
+                );
+            }
+
+            // Jika ADJI PORC juga tidak boleh minus
+            if ($docType === 'ADJI' && $this->adj_type === 'PORC' && $transQty > $currentStock) {
+                $validator->errors()->add(
+                    'trans_qty',
+                    'Quantity tidak boleh melebihi current stock (' . number_format($currentStock, 0, ',', '.') . ').'
+                );
+            }
+        });
     }
 }

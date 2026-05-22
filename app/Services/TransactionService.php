@@ -56,11 +56,16 @@ class TransactionService implements TransactionServiceInterface
                 $data['item_desc'] = $item->item_desc;
                 $data['item_uom']  = $item->item_uom;
 
-                // ── Hitung bb_qty, in_qty, out_qty, eb_qty sementara ──
-                // (akan di-overwrite recalculate jika back date)
-                $bbQty    = $item->current_stock;
-                $newStock = $bbQty;
+                // ✅ Ambil bb_qty dari eb_qty transaksi sebelumnya
+                $prevTransaction = DB::table('ic_trans_inv')
+                    ->where('item_id', $data['item_id'])
+                    ->where('trans_date', '<=', $transDate->toDateString())
+                    ->orderBy('trans_date', 'desc')
+                    ->orderBy('creation_date', 'desc')
+                    ->first();
 
+                $bbQty    = $prevTransaction ? $prevTransaction->eb_qty : $item->current_stock;
+                $newStock = $bbQty;
 
                 switch ($data['doc_type']) {
                     case 'PORC':
@@ -95,12 +100,23 @@ class TransactionService implements TransactionServiceInterface
                         break;
                 }
 
-                $transaction = $this->transactionRepository->create($data);
+                // ✅ Simulasi dulu sebelum simpan jika ada transaksi setelahnya
                 $hasNewerTransactions = DB::table('ic_trans_inv')
                     ->where('item_id', $data['item_id'])
-                    ->where('id', '!=', $transaction->id)        // exclude row yang baru dibuat
                     ->where('trans_date', '>', $transDate->toDateString())
                     ->exists();
+
+                if ($hasNewerTransactions) {
+                    $this->simulateRecalculate(
+                        $data['item_id'],
+                        $transDate,
+                        $data['trans_qty'],
+                        $data['doc_type'],
+                        $data['adj_type'] ?? null
+                    );
+                }
+
+                $transaction = $this->transactionRepository->create($data);
 
                 if ($hasNewerTransactions) {
                     // Back date → recalculate semua dari tanggal ini
@@ -182,7 +198,6 @@ class TransactionService implements TransactionServiceInterface
 
     private function recalculateStockFrom(string $itemId, Carbon $fromDate): void
     {
-        // 1. Ambil eb_qty terakhir SEBELUM fromDate sebagai starting balance
         $prevTransaction = DB::table('ic_trans_inv')
             ->where('item_id', $itemId)
             ->where('trans_date', '<', $fromDate->toDateString())
@@ -192,7 +207,6 @@ class TransactionService implements TransactionServiceInterface
 
         $runningBalance = $prevTransaction ? $prevTransaction->eb_qty : 0;
 
-        // 2. Ambil semua transaksi sejak fromDate, urut ascending
         $transactions = DB::table('ic_trans_inv')
             ->where('item_id', $itemId)
             ->where('trans_date', '>=', $fromDate->toDateString())
@@ -200,11 +214,18 @@ class TransactionService implements TransactionServiceInterface
             ->orderBy('creation_date', 'asc')
             ->get();
 
-
-        // 3. Loop recalculate bb_qty & eb_qty tiap baris
         foreach ($transactions as $trx) {
             $bbQty = $runningBalance;
             $ebQty = $bbQty + $trx->in_qty - $trx->out_qty;
+
+            // ✅ Validasi eb_qty tidak boleh minus
+            if ($ebQty < 0) {
+                throw new \Exception(
+                    "Stock tidak mencukupi pada tanggal {$trx->trans_date}. " .
+                        "Stock tersedia: " . number_format($bbQty, 0, ',', '.') . ", " .
+                        "Dibutuhkan: " . number_format($trx->out_qty, 0, ',', '.')
+                );
+            }
 
             DB::table('ic_trans_inv')
                 ->where('id', $trx->id)
@@ -216,9 +237,62 @@ class TransactionService implements TransactionServiceInterface
             $runningBalance = $ebQty;
         }
 
-        // 4. Update current_stock item master ke eb_qty transaksi terakhir
         $this->itemMasterRepository->update($itemId, [
             'current_stock' => $runningBalance,
         ]);
+    }
+
+    private function simulateRecalculate(string $itemId, Carbon $fromDate, float $transQty, string $docType, ?string $adjType): void
+    {
+        // ✅ Ambil eb_qty dari transaksi sebelum fromDate
+        $prevTransaction = DB::table('ic_trans_inv')
+            ->where('item_id', $itemId)
+            ->where('trans_date', '<', $fromDate->toDateString())
+            ->orderBy('trans_date', 'desc')
+            ->orderBy('creation_date', 'desc')
+            ->first();
+
+        // ✅ Jika tidak ada transaksi sebelumnya, ambil dari item master
+        $item = $this->itemMasterRepository->getById($itemId);
+        $runningBalance = $prevTransaction ? $prevTransaction->eb_qty : $item->current_stock;
+
+        // Hitung balance setelah transaksi baru
+        if ($docType === 'CONS') {
+            $runningBalance -= $transQty;
+        } elseif ($docType === 'PORC') {
+            $runningBalance += $transQty;
+        } elseif ($docType === 'ADJI') {
+            $runningBalance += $adjType === 'CONS' ? $transQty : -$transQty;
+        }
+
+        if ($runningBalance < 0) {
+            throw new \Exception(
+                "Stock tidak mencukupi pada tanggal {$fromDate->toDateString()}. " .
+                    "Stock tersedia: " . number_format($prevTransaction?->eb_qty ?? $item->current_stock, 0, ',', '.') . ", " .
+                    "Dibutuhkan: " . number_format($transQty, 0, ',', '.')
+            );
+        }
+
+        $transactions = DB::table('ic_trans_inv')
+            ->where('item_id', $itemId)
+            ->where('trans_date', '>=', $fromDate->toDateString())
+            ->orderBy('trans_date', 'asc')
+            ->orderBy('creation_date', 'asc')
+            ->get();
+
+        foreach ($transactions as $trx) {
+            $ebQty = $runningBalance + $trx->in_qty - $trx->out_qty;
+
+            if ($ebQty < 0) {
+                throw new \Exception(
+                    "Stock tidak mencukupi pada tanggal {$trx->trans_date}. " .
+                        "Jika back date ini disimpan, stock pada tanggal tersebut akan menjadi " .
+                        number_format($ebQty, 0, ',', '.') . ". " .
+                        "Harap sesuaikan quantity."
+                );
+            }
+
+            $runningBalance = $ebQty;
+        }
     }
 }
