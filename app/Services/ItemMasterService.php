@@ -107,6 +107,7 @@ class ItemMasterService implements ItemMasterServiceInterface
                     'in_qty'     => 0,
                     'out_qty'    => 0,
                     'adj_qty'    => 0,
+                    'adj_type'   => null,
                     'eb_qty'     => 0,
                     'doc_type'   => null,
                 ];
