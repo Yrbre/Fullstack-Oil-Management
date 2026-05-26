@@ -76,9 +76,10 @@
                                             @forelse($transSameDate as $trans)
                                                 <tr>
                                                     <td>{{ $trans->item_no }}</td>
-                                                    <td>{{ $trans->item_desc }}</td>
+                                                    <td>{{ $trans->item_desc }} </td>
                                                     <td>{{ number_format($trans->trans_qty, 1, ',', '.') }}</td>
-                                                    <td>{{ $trans->doc_type }}</td>
+                                                    <td>{{ $trans->adj_type ? $trans->doc_type . ' - ' . $trans->adj_type : $trans->doc_type }}
+                                                    </td>
                                                     <td>{{ $trans->created_by }}</td>
                                                     <td>{{ $trans->catatan ?? '-' }}</td>
                                                 </tr>
