@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('1'),
             'orgn_code' => 'IT',
             'gander' => 'male',
-            'phone' => '1234567890',
+            'mobile' => '1234567890',
             'designation' => 'admin',
             'status' => true,
         ]);

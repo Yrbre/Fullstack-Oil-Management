@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class IcItemMst extends Model
 {
     use HasFactory, SoftDeletes;
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $table = 'ic_item_mst';
 
-    const UPDATED_AT = null; // ← tidak ada updated_at
-    const CREATED_AT = null; // ← tidak ada created_at
+    // const UPDATED_AT = null; // ← tidak ada updated_at
+    // const CREATED_AT = null; // ← tidak ada created_at
     protected $fillable = [
         'item_id',
         'item_no',

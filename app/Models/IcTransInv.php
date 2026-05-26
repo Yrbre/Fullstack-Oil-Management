@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class IcTransInv extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $table = 'ic_trans_inv';
     protected $fillable = [
         'item_id',
