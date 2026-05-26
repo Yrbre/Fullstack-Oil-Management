@@ -18,7 +18,7 @@
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                             {{-- </div> --}}
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-md-2">
                                 <label for="">Tanggal Transaksi</label>
                                 <input type="date" class="form-control @error('trans_date') is-invalid @enderror"
                                     name="trans_date" id="trans_date" value="{{ old('trans_date') }}">
