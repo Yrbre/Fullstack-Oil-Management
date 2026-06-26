@@ -9,6 +9,7 @@ use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionController extends Controller
@@ -52,6 +53,14 @@ class TransactionController extends Controller
             }
             return view('pages.Transaction.index');
         } catch (\Exception $e) {
+            Log::error('Transaction index error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            if ($request->ajax()) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }
     }
