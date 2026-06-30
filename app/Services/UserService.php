@@ -7,7 +7,7 @@ use App\Services\Interfaces\UserServiceInterface;
 
 class UserService implements UserServiceInterface
 {
-    protected $userRepository;
+    protected UserRepositoryInterface $userRepository;
 
     public function __construct(UserRepositoryInterface $userRepository)
     {
@@ -19,7 +19,7 @@ class UserService implements UserServiceInterface
         return $this->userRepository->getAll();
     }
 
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->userRepository->getById($id);
     }
@@ -30,12 +30,12 @@ class UserService implements UserServiceInterface
         return $this->userRepository->create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
         return $this->userRepository->update($id, $data);
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         return $this->userRepository->delete($id);
     }
