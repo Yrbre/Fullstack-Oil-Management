@@ -2,25 +2,23 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-
-// User
+use App\Repositories\Eloquent\ItemMasterRepository;
+use App\Repositories\Eloquent\TransactionRepository;
 use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\WarehouseRepository;
+use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
+use App\Repositories\Interfaces\TransactionRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use App\Services\Interfaces\UserServiceInterface;
-use App\Services\UserService;
-
-// ItemMaster
+use App\Repositories\Interfaces\WarehouseRepositoryInterface;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
-use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
-use App\Repositories\Eloquent\ItemMasterRepository;
-
-//Transaction
+use App\Services\Interfaces\UserServiceInterface;
+use App\Services\Interfaces\WarehouseServiceInterface;
 use App\Services\ItemMasterService;
 use App\Services\TransactionService;
-use App\Repositories\Interfaces\TransactionRepositoryInterface;
-use App\Repositories\Eloquent\TransactionRepository;
+use App\Services\UserService;
+use App\Services\WarehouseService;
+use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -55,6 +53,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UserServiceInterface::class,
             UserService::class
+        );
+
+        $this->app->bind(
+            WarehouseRepositoryInterface::class,
+            WarehouseRepository::class
+        );
+
+        $this->app->bind(
+            WarehouseServiceInterface::class,
+            WarehouseService::class
         );
     }
 

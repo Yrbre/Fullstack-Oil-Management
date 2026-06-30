@@ -32,6 +32,8 @@
                                     Oil</span></a>
                             <a class="nav-link pl-lg-2" href="{{ route('users.index') }}"><span
                                     class="ml-1">Users</span></a>
+                            <a class="nav-link pl-lg-2" href="{{ route('warehouses.index') }}"><span
+                                    class="ml-1">Warehouses</span></a>
                         </div>
                     </li>
                 @endcan
@@ -292,7 +294,8 @@
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
                             @csrf
                         </form>
                     </li>

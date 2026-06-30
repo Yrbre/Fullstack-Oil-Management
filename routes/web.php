@@ -5,6 +5,7 @@ use App\Http\Controllers\ItemMasterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehousesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +47,7 @@ Route::middleware(['role:admin,manager'])->group(function () {
 
 Route::middleware('role:admin')->group(function () {
     Route::resource('users', UserController::class);
+    Route::resource('warehouses', WarehousesController::class);
 });
 
 require __DIR__ . '/auth.php';
