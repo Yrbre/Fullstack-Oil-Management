@@ -4,44 +4,26 @@
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header">
-                    <strong class="card-title">Form Edit Warehouse</strong>
+                    <strong class="card-title">Form Edit Department</strong>
                 </div>
                 <div class="card-body">
-                    <form method="POST" id="myForm" action="{{ route('warehouses.update', $warehouse->id) }}">
+                    <form method="POST" id="myForm" action="{{ route('departments.update', $department->id) }}">
                         @csrf
                         @method('PUT')
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="">Warehouse Name</label>
+                                <label for="">Department Name</label>
                                 <input type="text" class="form-control uppercase @error('name') is-invalid @enderror"
-                                    name="name" value="{{ old('name', $warehouse->name) }}">
+                                    name="name" value="{{ old('name', $department->name) }}">
                                 @error('name')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group col-md-12">
-                                <label for="">Tag Location</label>
-                                <input type="text" class="form-control uppercase @error('tag') is-invalid @enderror"
-                                    name="tag" value="{{ old('tag', $warehouse->tag) }}">
-                                @error('tag')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="inputAddress2" id="select2">Department</label>
-                                <select class="form-control select2 @error('department_id') is-invalid @enderror"
-                                    name="department_id" id="select2">
-                                    <option value="">-- Select Department --</option>
-                                    @foreach ($departments as $department)
-                                        <option value="{{ $department->id }}"
-                                            {{ old('department_id', $warehouse->department_id) == $department->id ? 'selected' : '' }}>
-                                            {{ $department->code }} - {{ $department->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('department_id')
+                                <label for="">Code</label>
+                                <input type="text" class="form-control uppercase @error('code') is-invalid @enderror"
+                                    name="code" value="{{ old('code', $department->code) }}">
+                                @error('code')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>

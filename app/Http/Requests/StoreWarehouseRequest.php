@@ -14,11 +14,13 @@ class StoreWarehouseRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => strtoupper(trim($this->name)),
+            'tag' => strtoupper(trim($this->tag)),
+        ]);
+    }
     public function rules(): array
     {
         return [

@@ -72,8 +72,7 @@ class WarehousesController extends Controller
     public function update(UpdateWarehouseRequest $request, string $id)
     {
         try {
-            $warehouse = $this->warehouseService->getById($id);
-            $warehouse->update($request->validated());
+            $this->warehouseService->update($id, $request->validated());
             Log::info('Warehouse updated successfully: ' . json_encode($request->validated()) . ' User: ' . auth()->user()->name . 'IP Address: ' . request()->ip() . 'User Agent: ' . request()->userAgent());
             return redirect()->route('warehouses.index')->with('success', 'Gudang Berhasil Diperbarui');
         } catch (\Exception $e) {
@@ -85,9 +84,8 @@ class WarehousesController extends Controller
     public function destroy(string $id)
     {
         try {
-            $warehouse = $this->warehouseService->getById($id);
-            $warehouse->delete();
-            Log::info('Warehouse deleted successfully: ' . $warehouse->name . ' User: ' . auth()->user()->name . 'IP Address: ' . request()->ip() . 'User Agent: ' . request()->userAgent());
+            $this->warehouseService->delete($id);
+            Log::info('Warehouse deleted successfully: ' . $id . ' User: ' . auth()->user()->name . 'IP Address: ' . request()->ip() . 'User Agent: ' . request()->userAgent());
             return redirect()->route('warehouses.index')->with('success', 'Gudang Berhasil Dihapus');
         } catch (\Exception $e) {
             Log::error('Error deleting warehouse: ' . $e->getMessage() . ' User: ' . auth()->user()->name . 'IP Address: ' . request()->ip() . 'User Agent: ' . request()->userAgent());

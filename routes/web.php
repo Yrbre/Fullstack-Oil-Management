@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashbaordController;
+use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\ItemMasterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -48,6 +49,7 @@ Route::middleware(['role:admin,manager'])->group(function () {
 Route::middleware('role:admin')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('warehouses', WarehousesController::class);
+    Route::resource('departments', DepartmentsController::class);
 });
 
 require __DIR__ . '/auth.php';

@@ -28,6 +28,8 @@
                             <span class="ml-lg-2">Master</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="ui-elementsDropdown">
+                            <a class="nav-link pl-lg-2" href="{{ route('departments.index') }}"><span
+                                    class="ml-1">Department</span></a>
                             <a class="nav-link pl-lg-2" href="{{ route('item-master.index') }}"><span class="ml-1">Item
                                     Oil</span></a>
                             <a class="nav-link pl-lg-2" href="{{ route('users.index') }}"><span

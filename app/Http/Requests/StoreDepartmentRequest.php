@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWarehouseRequest extends FormRequest
+class StoreDepartmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,15 +18,15 @@ class UpdateWarehouseRequest extends FormRequest
     {
         $this->merge([
             'name' => strtoupper(trim($this->name)),
-            'tag' => strtoupper(trim($this->tag)),
+            'code' => strtoupper(trim($this->code)),
         ]);
     }
+
     public function rules(): array
     {
         return [
-            'name'          => 'sometimes|string|max:255',
-            'tag'           => 'sometimes|string|max:255',
-            'department_id' => 'sometimes|exists:departments,id',
+            'name'          => 'required|string|max:255',
+            'code'          => 'required|string|max:100',
         ];
     }
 }

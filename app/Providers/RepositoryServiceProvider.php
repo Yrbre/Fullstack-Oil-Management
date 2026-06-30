@@ -2,14 +2,18 @@
 
 namespace App\Providers;
 
+use App\Repositories\Eloquent\DepartmentRepository;
 use App\Repositories\Eloquent\ItemMasterRepository;
 use App\Repositories\Eloquent\TransactionRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Eloquent\WarehouseRepository;
+use App\Repositories\Interfaces\DepartmentRepositoryInterface;
 use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\WarehouseRepositoryInterface;
+use App\Services\DepartmentService;
+use App\Services\Interfaces\DepartmentServiceInterface;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
@@ -63,6 +67,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             WarehouseServiceInterface::class,
             WarehouseService::class
+        );
+
+        $this->app->bind(
+            DepartmentRepositoryInterface::class,
+            DepartmentRepository::class
+        );
+
+        $this->app->bind(
+            DepartmentServiceInterface::class,
+            DepartmentService::class
         );
     }
 
