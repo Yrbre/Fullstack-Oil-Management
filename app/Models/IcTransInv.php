@@ -12,6 +12,8 @@ class IcTransInv extends Model
     // public $timestamps = false;
     protected $table = 'ic_trans_inv';
     protected $fillable = [
+        'request_id',
+        'trans_code',
         'item_id',
         'item_no',
         'item_desc',
@@ -19,6 +21,7 @@ class IcTransInv extends Model
         'orgn_code',
         'whse_code',
         'whse_loc',
+        'warehouse_tag',
         'doc_type',
         'adj_type',
         'reason_code',

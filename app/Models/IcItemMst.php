@@ -37,4 +37,9 @@ class IcItemMst extends Model
     {
         return $this->hasMany(IcTransInv::class, 'item_id', 'id');
     }
+
+    public function itemLocations()
+    {
+        return $this->hasMany(ItemLocations::class, 'item_id', 'id');
+    }
 }
