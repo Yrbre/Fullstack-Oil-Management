@@ -16,16 +16,19 @@ class ItemLocations extends Model
         'warehouse_id',
         'orgn_code',
         'vendor_lot',
+        'production_date',
         'exp_date',
         'type',
+        'qty_unit',
         'received_date',
         'package',
-        'qty_unit',
-        'qty_weight'
+        'qty_weight',
+        'notes',
     ];
 
     protected $casts = [
-        'receive_date' => 'date',
+        'production_date' => 'date',
+        'received_date' => 'date',
         'exp_date' => 'date',
         'qty_unit' => 'double',
         'qty_weight' => 'double',

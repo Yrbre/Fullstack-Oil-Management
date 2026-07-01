@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashbaordController;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\ItemLocationsController;
 use App\Http\Controllers\ItemMasterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -40,6 +41,7 @@ Route::middleware(['role:admin,manager,staff'])->group(function () {
     Route::post('/transactions/adjustment-stock', [TransactionController::class, 'storeAdjustmentStock'])->name('transactions.store-adjustment-stock');
     Route::resource('transactions', TransactionController::class);
     Route::get('/item-master/{id}/detail', [ItemMasterController::class, 'detail'])->name('item-master.detail');
+    Route::resource('item-locations', ItemLocationsController::class);
 });
 
 Route::middleware(['role:admin,manager'])->group(function () {
