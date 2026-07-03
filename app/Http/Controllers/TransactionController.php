@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAdjustmentStockRequest;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use App\Http\Requests\Transaction\UpdateTransactionRequest;
+use App\Services\Interfaces\DepartmentServiceInterface;
+use App\Services\Interfaces\ItemLocationServiceInterface;
 use App\Services\Interfaces\ItemMasterServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
+use App\Services\Interfaces\WarehouseServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -16,13 +20,22 @@ class TransactionController extends Controller
 {
     protected TransactionServiceInterface $transactionService;
     protected ItemMasterServiceInterface $itemMasterService;
+    protected DepartmentServiceInterface $departmentService;
+    protected WarehouseServiceInterface $warehouseService;
+    protected ItemLocationServiceInterface $itemLocationService;
 
     public function __construct(
         TransactionServiceInterface $transactionService,
-        ItemMasterServiceInterface $itemMasterService
+        ItemMasterServiceInterface $itemMasterService,
+        DepartmentServiceInterface $departmentService,
+        WarehouseServiceInterface $warehouseService,
+        ItemLocationServiceInterface $itemLocationService,
     ) {
         $this->transactionService = $transactionService;
         $this->itemMasterService = $itemMasterService;
+        $this->departmentService = $departmentService;
+        $this->warehouseService = $warehouseService;
+        $this->itemLocationService = $itemLocationService;
     }
     public function index(Request $request)
     {
@@ -71,8 +84,14 @@ class TransactionController extends Controller
     public function create()
     {
         try {
-            $items = $this->itemMasterService->getByOrgnCode(auth()->user()->orgn_code);
-            return view('pages.Transaction.create', compact('items'));
+            if (auth()->user()->orgn_code == 'IT') {
+                $items = $this->itemLocationService->getAllGroupBy();
+            } else {
+                $items = $this->itemLocationService->getByOrgnCode(auth()->user()->orgn_code);
+            }
+            $departments = $this->departmentService->getAll();
+            $warehouses = $this->warehouseService->getAll();
+            return view('pages.Transaction.create', compact('items', 'departments', 'warehouses'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data.');
         }
@@ -84,8 +103,13 @@ class TransactionController extends Controller
     public function store(StoreTransactionRequest $request)
     {
         try {
+            $data = $request->validated();
+            $data['bb_qty'] = DB::table('item_locations')
+                ->where('item_id', $data['item_id'])
+                ->where('warehouse_id', $data['warehouse_id'])
+                ->sum('qty_weight');
             $this->transactionService->create(
-                $request->validated(),
+                $data,
                 auth()->user()->name
             );
             if ($request->input('redirect_to') === 'create') {

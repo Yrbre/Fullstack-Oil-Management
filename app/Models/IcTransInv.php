@@ -19,6 +19,7 @@ class IcTransInv extends Model
         'item_desc',
         'item_uom',
         'orgn_code',
+        'warehouse_id',
         'whse_code',
         'whse_loc',
         'warehouse_tag',

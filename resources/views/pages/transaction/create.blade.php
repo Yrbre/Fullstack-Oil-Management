@@ -72,11 +72,17 @@
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="">Gudang</label>
-                                    <select class="form-control @error('whse_code') is-invalid @enderror" name="whse_code">
-                                        <option value="SF1" {{ old('whse_code') == 'SF1' ? 'selected' : '' }}>SF1</option>
-                                        <option value="SF2" {{ old('whse_code') == 'SF2' ? 'selected' : '' }}>SF2</option>
+                                    <select class="form-control @error('warehouse_id') is-invalid @enderror"
+                                        name="warehouse_id">
+                                        <option value=""selected>-- Pilih Gudang --</option>
+                                        @foreach ($warehouses as $item)
+                                            <option value="{{ $item->code }}"
+                                                {{ old('warehouse_id') == $item->code ? 'selected' : '' }}>
+                                                {{ $item->code }} - {{ $item->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
-                                    @error('whse_code')
+                                    @error('warehouse_id')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -142,6 +148,15 @@
                         </form>
                     @endcan
 
+
+
+
+
+
+
+
+
+                    {{-- FORM UNTUK ADMIN!!!!! --}}
                     @can('admin')
                         <form method="POST" id="myForm" action="{{ route('transactions.store') }}">
                             @csrf
@@ -151,15 +166,12 @@
                                     <label for="">Orgn Code</label>
                                     <select class="form-control @error('orgn_code') is-invalid @enderror" name="orgn_code">
                                         <option value="" disabled selected>-- Select Orgn Code --</option>
-                                        <option value="SFPL" {{ old('orgn_code') == 'SFPL' ? 'selected' : '' }}>SFPL
-                                        </option>
-                                        <option value="FY1" {{ old('orgn_code') == 'FY1' ? 'selected' : '' }}>FY1</option>
-                                        <option value="FY2" {{ old('orgn_code') == 'FY2' ? 'selected' : '' }}>FY2</option>
-                                        <option value="FY3" {{ old('orgn_code') == 'FY3' ? 'selected' : '' }}>FY3</option>
-                                        <option value="P-BX" {{ old('orgn_code') == 'P-BX' ? 'selected' : '' }}>P-BX
-                                        </option>
-                                        <option value="P-CP" {{ old('orgn_code') == 'P-CP' ? 'selected' : '' }}>P-CP
-                                        </option>
+                                        @foreach ($departments as $item)
+                                            <option value="{{ $item->code }}"
+                                                {{ old('orgn_code') == $item->code ? 'selected' : '' }}>
+                                                {{ $item->code }} - {{ $item->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     @error('orgn_code')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -202,17 +214,17 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-3">
                                     <label for="select2">Item No</label>
                                     <select class="form-control select2 @error('item_id') is-invalid @enderror"
                                         name="item_id" id="select2">
                                         <optgroup label="Available Items">
                                             <option value="" disabled selected>-- Select Item No --</option>
                                             @foreach ($items as $item)
-                                                <option value="{{ $item->id }}" data-uom="{{ $item->item_uom }}"
-                                                    data-current="{{ $item->current_stock }}"
-                                                    {{ old('item_id') == $item->id ? 'selected' : '' }}>
-                                                    {{ $item->item_no }} - {{ $item->item_desc }}
+                                                <option value="{{ $item->item_id }}" data-uom="{{ $item->item->item_uom }}"
+                                                    data-current="{{ $item->sum('qty_weight') }}"
+                                                    {{ old('item_id') == $item->item_id ? 'selected' : '' }}>
+                                                    {{ $item->item->item_no }} - {{ $item->item->item_desc }}
                                                 </option>
                                             @endforeach
                                         </optgroup>
@@ -221,38 +233,7 @@
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="">Warehouse</label>
-                                    <select class="form-control @error('whse_code') is-invalid @enderror" name="whse_code">
-                                        <option value="" disabled selected>-- Select Warehouse --</option>
-                                        <option value="SF1" {{ old('whse_code') == 'SF1' ? 'selected' : '' }}>SF1</option>
-                                        <option value="SF2" {{ old('whse_code') == 'SF2' ? 'selected' : '' }}>SF2</option>
-                                    </select>
-                                    @error('whse_code')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-3">
-                                    <label for="">Location</label>
-                                    <select class="form-control @error('whse_loc') is-invalid @enderror" name="whse_loc">
-                                        <option value="" disabled selected>-- Select Warehouse Location --</option>
-                                        <option value="SF1 SUPPLIES"
-                                            {{ old('whse_loc') == 'SF1 SUPPLIES' ? 'selected' : '' }}>
-                                            SF1 SUPPLIES</option>
-                                        <option value="SF2 SUPPLIES"
-                                            {{ old('whse_loc') == 'SF2 SUPPLIES' ? 'selected' : '' }}>
-                                            SF2 SUPPLIES</option>
-                                    </select>
-                                    @error('whse_loc')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
                                 <div class="form-group col-md-3">
                                     <label for="inputAddress2">Stock</label>
                                     <input type="text" class="form-control @error('current_stock') is-invalid @enderror"
@@ -261,7 +242,29 @@
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="">Warehouse</label>
+                                    <select class="form-control @error('warehouse_id') is-invalid @enderror"
+                                        name="warehouse_id">
+                                        <option value="" disabled selected>-- Select Warehouse --</option>
+                                        @foreach ($warehouses as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ old('warehouse_id') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->name }} - Tag {{ $item->tag }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('warehouse_id')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+
 
                             <div class="form-row">
                                 <div class="form-group col-md-3">

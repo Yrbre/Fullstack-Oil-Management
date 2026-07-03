@@ -26,8 +26,7 @@ class StoreTransactionRequest extends FormRequest
             'orgn_code'     => 'required|string',
             'trans_date'    => 'required|date',
             'doc_type'      => 'required|string',
-            'whse_code'     => 'required|string',
-            'whse_loc'      => 'required|string',
+            'warehouse_id'  => 'required|string',
             'current_stock' => 'required|numeric',
             'trans_qty'     => [
                 'required',
@@ -40,7 +39,7 @@ class StoreTransactionRequest extends FormRequest
         ];
     }
 
-    // ✅ Tambahkan ini
+
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {

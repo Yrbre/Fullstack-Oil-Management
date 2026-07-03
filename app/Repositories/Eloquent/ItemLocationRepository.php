@@ -19,9 +19,22 @@ class ItemLocationRepository implements ItemLocationRepositoryInterface
         return $this->model->orderBy('received_date', 'desc')->get();
     }
 
+    public function getAllGroupBy()
+    {
+        return $this->model->select('item_id', 'warehouse_id', 'orgn_code')
+            ->groupBy('item_id', 'warehouse_id', 'orgn_code')
+            ->get();
+    }
+
     public function getById(int $id)
     {
         return $this->model->findOrFail($id);
+    }
+
+
+    public function getByOrgnCode(string $orgnCode)
+    {
+        return $this->model->where('orgn_code', $orgnCode)->groupBy('item_id', 'warehouse_id', 'orgn_code')->get();
     }
 
     public function create(array $data)

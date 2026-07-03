@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\ItemMasterRepositoryInterface;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
+use App\Services\Interfaces\ItemLocationServiceInterface;
 use App\Services\Interfaces\TransactionServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -12,13 +13,16 @@ class TransactionService implements TransactionServiceInterface
 {
     protected TransactionRepositoryInterface $transactionRepository;
     protected ItemMasterRepositoryInterface $itemMasterRepository;
+    protected ItemLocationServiceInterface $itemLocationService;
 
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
-        ItemMasterRepositoryInterface $itemMasterRepository
+        ItemMasterRepositoryInterface $itemMasterRepository,
+        ItemLocationServiceInterface $itemLocationService,
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->itemMasterRepository = $itemMasterRepository;
+        $this->itemLocationService = $itemLocationService;
     }
 
     public function getAll()
@@ -61,16 +65,8 @@ class TransactionService implements TransactionServiceInterface
                 $data['item_desc'] = $item->item_desc;
                 $data['item_uom']  = $item->item_uom;
 
-                // ✅ Ambil bb_qty dari eb_qty transaksi sebelumnya
-                $prevTransaction = DB::table('ic_trans_inv')
-                    ->where('item_id', $data['item_id'])
-                    ->where('trans_date', '<=', $transDate->toDateString())
-                    ->orderBy('trans_date', 'desc')
-                    ->orderBy('creation_date', 'desc')
-                    ->first();
 
-                $bbQty    = $prevTransaction ? $prevTransaction->eb_qty : $item->current_stock;
-                $newStock = $bbQty;
+                $bbQty = $data['bb_qty'] ? $data['bb_qty'] : 0;
 
                 switch ($data['doc_type']) {
                     case 'PORC':
@@ -78,7 +74,6 @@ class TransactionService implements TransactionServiceInterface
                         $data['in_qty']  = $data['trans_qty'];
                         $data['out_qty'] = 0;
                         $data['eb_qty']  = $bbQty + $data['in_qty'];
-                        $newStock        = $bbQty + $data['in_qty'];
                         break;
 
                     case 'CONS':
@@ -86,7 +81,6 @@ class TransactionService implements TransactionServiceInterface
                         $data['in_qty']  = 0;
                         $data['out_qty'] = $data['trans_qty'];
                         $data['eb_qty']  = $bbQty - $data['out_qty'];
-                        $newStock        = $bbQty - $data['out_qty'];
                         break;
 
                     case 'ADJI':
@@ -95,12 +89,10 @@ class TransactionService implements TransactionServiceInterface
                             $data['in_qty']  = $data['trans_qty'];
                             $data['out_qty'] = 0;
                             $data['eb_qty']  = $bbQty + $data['in_qty'];
-                            $newStock        = $bbQty + $data['in_qty'];
                         } else {
                             $data['in_qty']  = 0;
                             $data['out_qty'] = $data['trans_qty'];
                             $data['eb_qty']  = $bbQty - $data['out_qty'];
-                            $newStock        = $bbQty - $data['out_qty'];
                         } //OK
                         break;
                 }
@@ -127,12 +119,22 @@ class TransactionService implements TransactionServiceInterface
                 if ($hasNewerTransactions) {
                     // Back date → recalculate semua dari tanggal ini
                     $this->recalculateStockFrom($data['item_id'], $transDate);
-                } else {
-                    // Normal → update current_stock biasa
-                    $this->itemMasterRepository->update($data['item_id'], [
-                        'current_stock' => $newStock,
-                    ]);
                 }
+                if ($data['doc_type'] === 'CONS') {
+                    $itemLocation = DB::table('item_locations')
+                        ->where('item_id', $data['item_id'])
+                        ->where('warehouse_id', $data['warehouse_id'])
+                        ->orderByRaw('ABS(DATEDIFF(exp_date, ?)) ASC', [now()->toDateString()])
+                        ->first();
+
+                    if ($itemLocation) {
+                        $newStock = $itemLocation->qty_weight - $data['out_qty'];
+                        $this->itemLocationService->update($itemLocation->id, [
+                            'qty_weight' => $newStock,
+                        ]);
+                    }
+                }
+
 
                 return $transaction;
             });

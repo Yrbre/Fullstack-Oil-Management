@@ -6,7 +6,11 @@ interface ItemLocationServiceInterface
 {
     public function getAll();
 
+    public function getAllGroupBy();
+
     public function getById(int $id);
+
+    public function getByOrgnCode(string $orgnCode);
 
     public function create(array $data);
 

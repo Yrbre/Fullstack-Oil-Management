@@ -6,7 +6,6 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\IcTransInv;
 use App\Repositories\Interfaces\TransactionRepositoryInterface;
-use Override;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -19,7 +18,7 @@ class TransactionRepository implements TransactionRepositoryInterface
 
     public function getAll()
     {
-        return $this->model->orderBy('trans_date', 'desc');
+        return $this->model->orderBy('creation_date', 'desc')->get();
     }
 
     public function getById(int $id)
