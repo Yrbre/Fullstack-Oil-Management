@@ -76,7 +76,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="ui-elementsDropdown">
                         <a class="nav-link pl-lg-2" href="{{ route('item-locations.index') }}"><span class="ml-1">Item
-                                Location</span></a>
+                                Onhand</span></a>
                     </div>
                 </li>
                 {{-- <li class="nav-item dropdown">

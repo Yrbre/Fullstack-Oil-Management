@@ -8,6 +8,8 @@ interface WarehouseServiceInterface
 
     public function getById(int $id);
 
+    public function getByOrgnCode(string $orgn_code);
+
     public function create(array $data);
 
     public function update(int $id, array $data);

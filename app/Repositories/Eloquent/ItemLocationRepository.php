@@ -34,7 +34,11 @@ class ItemLocationRepository implements ItemLocationRepositoryInterface
 
     public function getByOrgnCode(string $orgnCode)
     {
-        return $this->model->where('orgn_code', $orgnCode)->groupBy('item_id', 'warehouse_id', 'orgn_code')->get();
+        return $this->model
+            ->select('item_id', 'warehouse_id', 'orgn_code')
+            ->where('orgn_code', $orgnCode)
+            ->groupBy('item_id', 'warehouse_id', 'orgn_code')
+            ->get();
     }
 
     public function create(array $data)

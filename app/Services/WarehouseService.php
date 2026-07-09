@@ -24,6 +24,11 @@ class WarehouseService implements WarehouseServiceInterface
         return $this->warehouseRepository->getById($id);
     }
 
+    public function getByOrgnCode(string $orgn_code)
+    {
+        return $this->warehouseRepository->getByOrgnCode($orgn_code);
+    }
+
     public function create(array $data)
     {
         return $this->warehouseRepository->create($data);

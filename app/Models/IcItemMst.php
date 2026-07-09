@@ -25,6 +25,7 @@ class IcItemMst extends Model
         'item_glclass',
         'item_usedby',
         'current_stock',
+        'department_id',
     ];
 
     protected $casts = [
@@ -41,5 +42,10 @@ class IcItemMst extends Model
     public function itemLocations()
     {
         return $this->hasMany(ItemLocations::class, 'item_id', 'id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Departments::class, 'department_id', 'id');
     }
 }

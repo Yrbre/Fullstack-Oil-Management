@@ -90,10 +90,10 @@ class TransactionController extends Controller
                 $items = $this->itemLocationService->getByOrgnCode(auth()->user()->orgn_code);
             }
             $departments = $this->departmentService->getAll();
-            $warehouses = $this->warehouseService->getAll();
+            $warehouses = $this->warehouseService->getByOrgnCode(auth()->user()->orgn_code);
             return view('pages.Transaction.create', compact('items', 'departments', 'warehouses'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal memuat data.');
+            return redirect()->back()->with('error', 'Gagal memuat data. ' . $e->getMessage());
         }
     }
 
@@ -149,7 +149,8 @@ class TransactionController extends Controller
         try {
             $transaction = $this->transactionService->getById($id);
             $items = $this->itemMasterService->getByOrgnCode(auth()->user()->orgn_code);
-            return view('pages.Transaction.edit', compact('transaction', 'items'));
+            $warehouses = $this->warehouseService->getByOrgnCode(auth()->user()->orgn_code);
+            return view('pages.Transaction.edit', compact('transaction', 'items', 'warehouses'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memuat data transaksi.');
         }

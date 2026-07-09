@@ -55,10 +55,10 @@
                                         <optgroup label="Available Items">
                                             <option value="" disabled selected>-- Pilih No Item --</option>
                                             @foreach ($items as $item)
-                                                <option value="{{ $item->id }}" data-uom="{{ $item->item_uom }}"
-                                                    data-current="{{ $item->current_stock ?? 0 }}"
-                                                    {{ old('item_id') == $item->id ? 'selected' : '' }}>
-                                                    {{ $item->item_no }} - {{ $item->item_desc }}
+                                                <option value="{{ $item->item_id }}" data-uom="{{ $item->item->item_uom }}"
+                                                    data-current="{{ $item->sum('qty_weight') }}"
+                                                    {{ old('item_id') == $item->item_id ? 'selected' : '' }}>
+                                                    {{ $item->item->item_no }} - {{ $item->item->item_desc }}
                                                 </option>
                                             @endforeach
                                         </optgroup>
@@ -76,25 +76,13 @@
                                         name="warehouse_id">
                                         <option value=""selected>-- Pilih Gudang --</option>
                                         @foreach ($warehouses as $item)
-                                            <option value="{{ $item->code }}"
-                                                {{ old('warehouse_id') == $item->code ? 'selected' : '' }}>
-                                                {{ $item->code }} - {{ $item->name }}
+                                            <option value="{{ $item->id }}"
+                                                {{ old('warehouse_id') == $item->id ? 'selected' : '' }}>
+                                                {{ $item->name }} - Tag {{ $item->tag }}
                                             </option>
                                         @endforeach
                                     </select>
                                     @error('warehouse_id')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="">Lokasi</label>
-                                    <select class="form-control @error('whse_loc') is-invalid @enderror" name="whse_loc">
-                                        <option value="SF1 SUPPLIES" {{ old('whse_loc') == 'SF1 SUPPLIES' ? 'selected' : '' }}>
-                                            SF1 SUPPLIES</option>
-                                        <option value="SF2 SUPPLIES" {{ old('whse_loc') == 'SF2 SUPPLIES' ? 'selected' : '' }}>
-                                            SF2 SUPPLIES</option>
-                                    </select>
-                                    @error('whse_loc')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
