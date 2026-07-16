@@ -53,6 +53,9 @@
                             <a class="nav-link pl-lg-2" href="{{ route('transactions.index') }}"><span
                                     class="ml-1">Supply
                                     Oil</span></a>
+                            <a class="nav-link pl-lg-2" href="{{ route('transfer-requests.index') }}"><span
+                                    class="ml-1">Transfer
+                                    Request</span></a>
                         </li>
                         @can('admin')
                             <li class="nav-item dropdown">

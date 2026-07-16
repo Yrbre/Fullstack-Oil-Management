@@ -27,6 +27,7 @@ class User extends Authenticatable
         'designation',
         'imgae',
         'status',
+        'department_id',
     ];
 
     /**
@@ -55,4 +56,9 @@ class User extends Authenticatable
     //         $query->where('status', true);
     //     });
     // }
+
+    public function department()
+    {
+        return $this->belongsTo(Departments::class, 'department_id', 'id');
+    }
 }

@@ -117,8 +117,8 @@ class ItemMasterService implements ItemMasterServiceInterface
         return collect($allDates);
     }
 
-    public function getByOrgnCode(string $orgnCode)
+    public function getByOrgnCode(string $department_id)
     {
-        return $this->itemMasterRepository->getByOrgnCode($orgnCode);
+        return $this->itemMasterRepository->getByOrgnCode($department_id);
     }
 }

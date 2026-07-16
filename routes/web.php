@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemLocationsController;
 use App\Http\Controllers\ItemMasterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransferRequestsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehousesController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::get('/dashboard', [DashbaordController::class, 'index'])->middleware(['au
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('get-stock', [TransferRequestsController::class, 'getStock'])->name('transfer-requests.get-stock');
 });
 
 Route::middleware(['role:admin,manager,staff'])->group(function () {
@@ -42,6 +44,7 @@ Route::middleware(['role:admin,manager,staff'])->group(function () {
     Route::resource('transactions', TransactionController::class);
     Route::get('/item-master/{id}/detail', [ItemMasterController::class, 'detail'])->name('item-master.detail');
     Route::resource('item-locations', ItemLocationsController::class);
+    Route::resource('transfer-requests', TransferRequestsController::class);
 });
 
 Route::middleware(['role:admin,manager'])->group(function () {

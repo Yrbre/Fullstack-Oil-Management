@@ -18,7 +18,7 @@ class Departments extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'orgn_code', 'id');
+        return $this->hasMany(User::class, 'department_id', 'id');
     }
 
     public function warehouses()

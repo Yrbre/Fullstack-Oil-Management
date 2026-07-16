@@ -43,12 +43,10 @@ class ItemMasterRepository implements ItemMasterRepositoryInterface
         return $item->delete();
     }
 
-    public function getByOrgnCode(string $orgnCode)
+    public function getByOrgnCode(string $department_id)
     {
-        return $this->model->when($orgnCode !== 'IT', function ($q) use ($orgnCode) {
-            $q->where('orgn_code', $orgnCode);
-        })
-            ->orderBy('item_no')
-            ->get();
+        return $department_id = '1' ?
+            $this->model->orderBy('item_desc')->get() :
+            $this->model->where('department_id', $department_id)->orderBy('item_desc')->get();
     }
 }

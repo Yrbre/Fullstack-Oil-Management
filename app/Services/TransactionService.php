@@ -83,6 +83,13 @@ class TransactionService implements TransactionServiceInterface
                         $data['eb_qty']  = $bbQty - $data['out_qty'];
                         break;
 
+                    case 'TRANSFER':
+                        $data['bb_qty']  = $bbQty;
+                        $data['in_qty']  = $data['trans_qty'];
+                        $data['out_qty'] = 0;
+                        $data['eb_qty']  = $bbQty + $data['in_qty'];
+                        break;
+
                     case 'ADJI':
                         $data['bb_qty'] = $bbQty;
                         if ($data['adj_type'] === 'CONS') {

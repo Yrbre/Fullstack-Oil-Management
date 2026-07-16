@@ -26,9 +26,9 @@ class WarehouseRepository implements WarehouseRepositoryInterface
         return $this->model->findOrFail($id);
     }
 
-    public function getByOrgnCode(string $orgn_code)
+    public function getByOrgnCode(string $department_id)
     {
-        return $this->model->where('orgn_code', $orgn_code)->orderBy('name')->get();
+        return $this->model->where('department_id', $department_id)->orderBy('name')->get();
     }
 
     public function create(array $data)
